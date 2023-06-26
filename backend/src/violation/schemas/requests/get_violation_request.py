@@ -1,4 +1,4 @@
 from marshmallow import Schema, fields
 
-class GetAssetRequest(Schema):
+class GetViolationRequest(Schema):
     asset_id = fields.String(required=True)

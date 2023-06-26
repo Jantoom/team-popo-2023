@@ -7,7 +7,7 @@
 @baseUrl = http://{{localDns}}/api/v1
 
 ### ------------------------------ USERS ------------------------------
-@testToken = null
+@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4Nzc1MDg2NywianRpIjoiOTQ2YzNiYjktNmI5Ny00ZDAyLTlhNDItMmYzZTA2YzMxZDRiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjYyNTBmYzE1LWIyMWItNGY3Ni05NTMzLTc2M2Y5OGQ4MzIzMiIsIm5iZiI6MTY4Nzc1MDg2NywiZXhwIjoxNjg3NzY4ODY3fQ.2qtYb6w8czHcuoFU0uT5ABjgFDK0PzmSrkfQWMCDqDU
 
 ### Query the health of the user service.
 GET {{baseUrl}}/users/health
@@ -24,7 +24,7 @@ Content-Type: application/x-www-form-urlencoded
 POST {{baseUrl}}/users/login
 Content-Type: application/x-www-form-urlencoded
 
-&username=sementha
+&username=sementha2
 &password=123
 
 ### Logs out a user.
@@ -46,8 +46,7 @@ Authorization: {{testToken}}
 Content-Type: application/json
 
 {
-    "title": "Sementha's Notebook",
-    "description": "Notey woteys"
+    "type": "TWO_SPACES"
 }
 
 ### ------------------------------ ADMIN ------------------------------

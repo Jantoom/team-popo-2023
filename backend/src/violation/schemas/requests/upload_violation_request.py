@@ -2,7 +2,7 @@ from base64 import b64decode
 from marshmallow import Schema, fields, validate
 from flask_jwt_extended import get_jwt_identity
 
-class UploadAssetRequest(Schema):
+class UploadViolationRequest(Schema):
     user_id = fields.String(load_default=lambda: get_jwt_identity())
     name = fields.String(required=True, validate=validate.Length(min=1))
     description = fields.String(load_default='')

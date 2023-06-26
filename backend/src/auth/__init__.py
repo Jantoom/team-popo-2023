@@ -9,7 +9,7 @@ def create_app(config_overrides=None):
     CORS(app)
     
     # Enable the endpoints
-    from src.main.routes import user_routes
+    from src.auth.routes import user_routes
     app.register_blueprint(api)
 
     return app
