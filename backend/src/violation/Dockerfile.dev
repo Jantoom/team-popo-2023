@@ -17,8 +17,8 @@ RUN pipenv install --system --deploy
 
 # Copying our application into the container
 COPY backend/src/core src/core
-COPY backend/src/auth src/auth
+COPY backend/src/violation src/violation
 # Running our application
-RUN chmod +x src/auth/docker-entrypoint
-ENTRYPOINT ["src/auth/docker-entrypoint"]
+RUN chmod +x /app/src/violation/docker-entrypoint
+ENTRYPOINT ["/app/src/violation/docker-entrypoint"]
 CMD ["serve"]

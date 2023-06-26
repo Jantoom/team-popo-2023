@@ -21,7 +21,7 @@ def create_default_app(config_overrides=None) -> Flask:
         app.config.update(config_overrides)
 
     # Load the models
-    from src.core.models import Asset, Notebook, Page, UserAsset, User
+    from src.core.models import User, Violation
     from src.core.services import db, ma, jwt_manager
     db.init_app(app)
     ma.init_app(app)

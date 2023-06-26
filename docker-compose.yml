@@ -10,42 +10,6 @@ services:
     env_file:
       - docker-compose.env
 
-  auth:
-    build:
-      context: .
-      dockerfile: backend/src/auth/Dockerfile.dev
-    restart: always
-    env_file:
-      - docker-compose.env
-    ports:
-      - 6401:6400
-    depends_on:
-      - database
-
-  marketplace:
-    build:
-      context: .
-      dockerfile: backend/src/marketplace/Dockerfile.dev
-    restart: always
-    env_file:
-      - docker-compose.env
-    ports:
-      - 6402:6400
-    depends_on:
-      - database
-
-  notebook:
-    build:
-      context: .
-      dockerfile: backend/src/notebook/Dockerfile.dev
-    restart: always
-    env_file:
-      - docker-compose.env
-    ports:
-      - 6403:6400
-    depends_on:
-      - database
-
   admin:
     build:
       context: .
@@ -54,7 +18,31 @@ services:
     env_file:
       - docker-compose.env
     ports:
-      - 6404:6400
+      - 6401:6400
+    depends_on:
+      - database
+
+  auth:
+    build:
+      context: .
+      dockerfile: backend/src/auth/Dockerfile.dev
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - 6402:6400
+    depends_on:
+      - database
+
+  violation:
+    build:
+      context: .
+      dockerfile: backend/src/violation/Dockerfile.dev
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - 6403:6400
     depends_on:
       - database
 
@@ -66,9 +54,9 @@ services:
     ports:
       - 6400:6400
     depends_on:
+      - admin
       - auth
-      - marketplace
-      - notebook
+      - violation
 
   # frontend:
   #   build:

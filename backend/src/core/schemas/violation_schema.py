@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, validate
 
-class AssetSchema(Schema):
+class ViolationSchema(Schema):
     id = fields.Str(required=True)
     user_id = fields.Str(required=True)
     name = fields.Str(required=True, validate=validate.Length(min=1))

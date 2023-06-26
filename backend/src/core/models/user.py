@@ -8,10 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     username = db.Column(db.String(64), nullable=False, unique=True)
     password_hash = db.Column(db.String(120), nullable=False)
-    credit = db.Column(db.Integer(), nullable=False, default=0)
-    notebooks = db.relationship('Notebook', backref='creator', lazy='dynamic')
-    uploaded_assets = db.relationship('Asset', backref='uploader', lazy='dynamic')
-    owned_assets = db.relationship('UserAsset', backref='owner', lazy='dynamic')
+    uploaded_violations = db.relationship('Violation', backref='uploader', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -30,9 +27,8 @@ class User(db.Model):
             'id': self.id,
             'email': self.email,
             'username': self.username,
-            'password_hash': self.password_hash,
-            'credit': self.credit
+            'password_hash': self.password_hash
         }
     
     def __repr__(self):
-        return f'<User({self.id}, {self.email}, {self.username}, {self.password_hash}, {self.credit})>'
+        return f'<User({self.id}, {self.email}, {self.username}, {self.password_hash})>'

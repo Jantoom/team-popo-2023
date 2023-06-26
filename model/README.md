@@ -15,4 +15,5 @@
 ## Dependencies
 
 * Python 3.10
+* Miniconda 3
 * TensorFlow GPU
