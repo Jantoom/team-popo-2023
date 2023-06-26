@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, validate
 from flask_jwt_extended import get_jwt_identity
 
-class GetAssetListRequest(Schema):
+class GetViolationListRequest(Schema):
     user_id = fields.String(load_default=lambda: get_jwt_identity())
     purchased = fields.Boolean(load_default=False)
     search_term = fields.String(load_default='')
