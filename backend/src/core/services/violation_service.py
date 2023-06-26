@@ -9,28 +9,11 @@ BUCKET_NAME = os.getenv('S3_BUCKET', None) # Set your S3 bucket name in code/doc
 S3 = boto3.client('s3')
 
 def get_violations(data: dict) -> Tuple[List[Violation], int]:
-    # get violations uploaded by user with user_id
-    if data['get_uploaded']:
-        violations = Violation.query.filter_by(user_id=data['user_id']).all()
-        total_violation_count = Violation.query.filter_by(user_id=data['user_id']).count()
-        return violations, total_violation_count
-
-    # SEARCH TERM, PROBS NOT GOING TO BE USED
-    #
-    # formatted_search_term = '%{}%'.format(data['search_term'])
-    # offset = (data['page'] - 1) * PAGE_SIZE
-    # if data['purchased']:
-    #     violations = db.session.scalars(db.
-    #         select(Violation).
-    #         join(UserViolation).
-    #         where(UserViolation.user_id == data['user_id'] and Violation.name.ilike(formatted_search_term))).all()
-    # else:
-    #     violations = db.session.scalars(db.
-    #         select(Violation).
-    #         where(Violation.name.ilike(formatted_search_term)).
-    #         limit(PAGE_SIZE).offset(offset)).all()
-    # total_violation_count = Violation.query.filter(Violation.name.ilike(formatted_search_term)).count()
-    # return violations, total_violation_count
+    violations = db.session.scalars(db.
+        select(Violation).
+        where(Violation.user_id == data['user_id'])).all()
+    total_violation_count = len(violations)
+    return violations, total_violation_count
 
 def get_violation(data: dict) -> Violation:
     violation = db.session.scalars(db.
@@ -61,7 +44,8 @@ def delete_violation(data: dict) -> Violation:
     else:
         return None
 
-# FIX
+###  -------------------- FIX -------------------- ###
+
 def upload_violation_to_s3_bucket(data: dict) -> str:
     random_string = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
     key_name = f'{data["name"]}_{random_string}'
@@ -69,7 +53,6 @@ def upload_violation_to_s3_bucket(data: dict) -> str:
     
     return key_name
 
-# FIX
 def create_presigned_url(resource_url: str) -> str:
     try:
         response = S3.generate_presigned_url('get_object',

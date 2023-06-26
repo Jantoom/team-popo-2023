@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required
-from backend.src.core.services import violation_service
+from src.core.services import violation_service
 from src.core.util import unknown_error
 from src.core.schemas import parse_input
 from src.core.services import user_service
