@@ -1,0 +1,69 @@
+# Runs software project locally
+# You can specify the S3 bucket in docker-compose.env
+
+version: "3.9"
+
+services:
+  database:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - docker-compose.env
+
+  admin:
+    build:
+      context: .
+      dockerfile: backend/src/admin/Dockerfile.dev
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - 6401:6400
+    depends_on:
+      - database
+
+  auth:
+    build:
+      context: .
+      dockerfile: backend/src/auth/Dockerfile.dev
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - 6402:6400
+    depends_on:
+      - database
+
+  violation:
+    build:
+      context: .
+      dockerfile: backend/src/violation/Dockerfile.dev
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - 6403:6400
+    depends_on:
+      - database
+
+  reverse-proxy:
+    build:
+      context: .
+      dockerfile: backend/nginx/Dockerfile.dev
+    restart: always
+    ports:
+      - 6400:6400
+    depends_on:
+      - admin
+      - auth
+      - violation
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile.dev
+  #   restart: always
+  #   env_file:
+  #     - docker-compose.env
+  #   ports:
+  #     - 3000:80

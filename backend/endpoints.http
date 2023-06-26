@@ -1,0 +1,60 @@
+### Install the REST Client extension by Huachao Mao 
+### in the VSCode Marketplace to use these endpoints
+
+### Base URL to connect to
+@localDns = 127.0.0.1:6400
+@serverDns = null
+@baseUrl = http://{{localDns}}/api/v1
+
+### ------------------------------ USERS ------------------------------
+@testToken = null
+
+### Query the health of the user service.
+GET {{baseUrl}}/users/health
+
+### Signs up a new user.
+POST {{baseUrl}}/users/signup
+Content-Type: application/x-www-form-urlencoded
+
+&email=sementha2@example.org
+&username=sementha2
+&password=123
+
+### Logs in a user.
+POST {{baseUrl}}/users/login
+Content-Type: application/x-www-form-urlencoded
+
+&username=sementha
+&password=123
+
+### Logs out a user.
+GET {{baseUrl}}/users/logout
+Authorization: {{testToken}}
+
+### ------------------------------ VIOLATIONS ------------------------------
+
+### Query the health of the violations service.
+GET {{baseUrl}}/violations/health
+
+### List all the violations associated with the session account.
+GET {{baseUrl}}/violations
+Authorization: {{testToken}}
+
+### Add a new violation associated with the session account.
+POST {{baseUrl}}/violation
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+    "title": "Sementha's Notebook",
+    "description": "Notey woteys"
+}
+
+### ------------------------------ ADMIN ------------------------------
+
+### Query the health of the admin service.
+GET {{baseUrl}}/admin/health
+
+### List all the users.
+GET {{baseUrl}}/admin/users
+Authorization: {{testToken}}
