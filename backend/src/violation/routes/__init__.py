@@ -1,6 +1,6 @@
-import src.violation.routes.violation_list_routes
-import src.violation.routes.violation_routes
-from src.violation import api
+import violation.routes.violation_list_routes
+import violation.routes.violation_routes
+from violation import api
 
 @api.route('/health', methods=['GET'])
 def health_check():

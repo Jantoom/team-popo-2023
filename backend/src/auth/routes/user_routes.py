@@ -1,10 +1,10 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token, jwt_required
-from src.core.util import unknown_error
-from src.core.schemas import parse_input
-from src.core.services import user_service
-from src.auth import api
-from src.auth.schemas import SignupUserRequest, LoginUserRequest, LogoutUserRequest
+from core.util import unknown_error
+from core.schemas import parse_input
+from core.services import user_service
+from auth import api
+from auth.schemas import SignupUserRequest, LoginUserRequest, LogoutUserRequest
 
 @api.route('/signup', methods=['POST'])
 def signup_user():

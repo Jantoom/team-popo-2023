@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from src.core.services import db
+from core.services import db
 
 class Violation(db.Model):
     __tablename__ = 'violations'

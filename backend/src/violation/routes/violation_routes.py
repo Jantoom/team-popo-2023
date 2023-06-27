@@ -1,10 +1,10 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from src.core.util import unknown_error
-from src.core.schemas import parse_input
-from src.core.services import violation_service
-from src.violation import api
-from src.violation.schemas import GetViolationRequest, DeleteViolationRequest
+from core.util import unknown_error
+from core.schemas import parse_input
+from core.services import violation_service
+from violation import api
+from violation.schemas import GetViolationRequest, DeleteViolationRequest
 
 @api.route('/<string:violation_id>', methods=['GET'])
 @jwt_required()

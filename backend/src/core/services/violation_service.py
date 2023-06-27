@@ -1,8 +1,8 @@
 import boto3, random, string, io, os
 from typing import List, Tuple
-from src.core.services import db
 from botocore.exceptions import ClientError
-from src.core.models import Violation
+from core.services import db
+from core.models import Violation
 
 PAGE_SIZE = 10
 BUCKET_NAME = os.getenv('S3_BUCKET', None) # Set your S3 bucket name in code/docker-compose.env

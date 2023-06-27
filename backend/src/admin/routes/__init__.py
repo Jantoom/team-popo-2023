@@ -1,4 +1,4 @@
-from src.admin import api
+from admin import api
 
 @api.route('/health', methods=['GET'])
 def health_check():

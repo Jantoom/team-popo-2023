@@ -1,7 +1,7 @@
 from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
-from src.core.services import db, jwt_manager
-from src.core.models.user import User
+from core.services import db, jwt_manager
+from core.models.user import User
     
 @jwt_manager.user_identity_loader
 def load_user(user_id) -> User:
