@@ -2,7 +2,7 @@
 ### in the VSCode Marketplace to use these endpoints
 
 ### Base URL to connect to
-@localDns = 127.0.0.1:6400
+@localDns = 10.194.139.183:6400
 @serverDns = null
 @baseUrl = http://{{localDns}}/api/v1
 

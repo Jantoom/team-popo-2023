@@ -16,9 +16,9 @@ RUN pipenv install --system --deploy
 # COPY credentials /root/.aws/credentials
 
 # Copying our application into the container
-COPY backend/src/core src/core
-COPY backend/src/admin src/admin
+COPY backend/src/core core
+COPY backend/src/admin admin
 # Running our application
-RUN chmod +x src/admin/docker-entrypoint
-ENTRYPOINT ["src/admin/docker-entrypoint"]
+RUN chmod +x admin/docker-entrypoint
+ENTRYPOINT ["admin/docker-entrypoint"]
 CMD ["serve"]

@@ -11,9 +11,9 @@ fi
 
 # If the first argument is serve then run the default command
 if [ $# -eq 0 ] || [ "$1" = "serve" ]; then
-    python3 /app/src/violation/wait_for_db.py
+    python3 /app/violation/wait_for_db.py
 
-    exec /usr/local/bin/gunicorn --bind 0.0.0.0:6400 'src.violation:create_app()'
+    exec /usr/local/bin/gunicorn --bind 0.0.0.0:6400 'violation:create_app()'
 fi
 
 # ADD SRC.VIOLATION:CREATE_APP() TO DOCKERFILE
