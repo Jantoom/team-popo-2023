@@ -20,10 +20,15 @@ export class StyleService {
           backgroundColor: 'transparent',
           margin: 64,
         },
-        button: {
+        navButton: {
           flex: 1,
           alignItems: 'center',
-          justifyContent:'center'
+          justifyContent:'center',
+        },
+        navButtonImage: {
+          height:"60%",
+          width:'100%',
+          resizeMode:'center'
         },
         cameraButton: {
           backgroundColor:'transparent',

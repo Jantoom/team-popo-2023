@@ -21,15 +21,15 @@ export default class MainLayout extends React.Component {
             <View style={{flex: 1, backgroundColor: "black"}}>
                 <NavigationComponent style={{flex: 1}}/>
                 <View style={{alignSelf:'flex-end', minHeight:50, justifyContent:'center', display:'flex', flexDirection:'row', flex:1, backgroundColor:"#1e1e1e", borderTopLeftRadius:22, borderTopRightRadius: 22, flex:1, maxHeight:"6%", paddingHorizontal:"4%", marginTop:5}}>
-                        <TouchableOpacity style={StyleService.main.button} onPress={() => NavigationService.navigate("home")}>
-                            <Image source={require("../assets/home.png")} style={{height:"60%", resizeMode:'center'}}></Image>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={StyleService.main.button} onPress={() => NavigationService.navigate("camera")}>
-                        <Image source={require("../assets/camera.png")} style={{height:"60%", resizeMode:'center'}}></Image>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={StyleService.main.button} onPress={() => NavigationService.navigate("gallery")}>
-                            <Image source={require("../assets/profile.png")} style={{height:"60%", resizeMode:'center'}}></Image>
-                        </TouchableOpacity>
+                    <TouchableOpacity style={StyleService.main.navButton} onPress={() => NavigationService.navigate("home")}>
+                        <Image source={require("../assets/home.png")} style={StyleService.main.navButtonImage}></Image>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={StyleService.main.navButton} onPress={() => NavigationService.navigate("camera")}>
+                        <Image source={require("../assets/camera.png")} style={StyleService.main.navButtonImage}></Image>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={StyleService.main.navButton} onPress={() => NavigationService.navigate("gallery")}>
+                        <Image source={require("../assets/profile.png")} style={StyleService.main.navButtonImage}></Image>
+                    </TouchableOpacity>
                 </View>
             </View>
             
