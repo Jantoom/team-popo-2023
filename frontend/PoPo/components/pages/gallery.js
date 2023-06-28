@@ -30,7 +30,7 @@ export default class GalleryPage extends React.Component {
         }
 
         this.deleteImage = (imageURI) => {
-            FileService.deleteFile(fileURI)      
+            FileService.deleteFile(imageURI)      
             this.updateImageLibrary()
         }
     }
@@ -45,22 +45,19 @@ export default class GalleryPage extends React.Component {
     render() {
         return (
             <View style={{display:"flex", flex:1, padding:10}}>
-                <View style={{display: "flex", flexDirection:'row', paddingBottom:10}}>
-                    <Button title='<-' onPress={() => NavigationService.navigate("camera")}></Button>
-                    <Text style={{flex:1, fontSize:30}}>Gallery</Text>
-                </View>
-                
                 <ScrollView style={{display: "flex"}}>
                     <View style={{display: "flex", flexDirection:'row',flexWrap:'wrap'}}>
                         {this.state.images.map((item, index) => {
                             return (
-                                <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.sendImage(item["fileURI"])}}>
+                                <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.deleteImage(item["fileURI"])}}>
                                     <Image source={{uri: item["fileURI"]}} style={{flex:1, borderRadius:10}}></Image>
                                 </TouchableHighlight>
                             )
                         })}
                     </View>
                 </ScrollView>
+                {this.state.images.length == 0 ? <Text style={{color:"#dddddd", alignSelf:'center', bottom:"48%"}}>No Images Found</Text> : <></>}
+                
             </View>
         );
     }

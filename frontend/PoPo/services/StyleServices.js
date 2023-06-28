@@ -14,13 +14,6 @@ export class StyleService {
             justifyContent: 'center',
             backgroundColor: 'transparent'
         },
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-          },
-        camera: {
-           flex: 1,
-        },
         buttonContainer: {
           flex: 1,
           flexDirection: 'row',
@@ -29,8 +22,19 @@ export class StyleService {
         },
         button: {
           flex: 1,
-          alignSelf: 'flex-end',
           alignItems: 'center',
+          justifyContent:'center'
+        },
+        cameraButton: {
+          backgroundColor:'transparent',
+          width:"25%",
+          borderRadius:100,
+          aspectRatio:1,
+          alignSelf:'center',
+          marginBottom:"5%",
+          borderColor:"white",
+          borderWidth:5,
+          marginHorizontal:20
         },
         text: {
           fontSize: 24,

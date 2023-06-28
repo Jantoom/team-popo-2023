@@ -21,18 +21,19 @@ export default class CameraPage extends React.Component {
         };
 
         this.toggleCameraType = () => {
-            this.setState({cameraType: this.state.cameraType === CameraType.back ? CameraType.front : CameraType.back})
+            this.setState(
+                {
+                    cameraType: this.state.cameraType === CameraType.back ? CameraType.front : CameraType.back
+                }
+            )
         }
 
         this.takePhoto = async () => {
-            const photo = await camera.takePictureAsync();
-            console.log(photo)
+            const photo = await camera.takePictureAsync({skipProcessing: true});    
         }
 
         this.requestPermission = async () => {
             this.setState({permission: await Camera.requestCameraPermissionsAsync()})
-            console.log(await Camera.requestCameraPermissionsAsync())
-            console.log("test")
         }
         
         this.leaveCamera = (newPage) => {
@@ -60,20 +61,45 @@ export default class CameraPage extends React.Component {
     render() {
         if (this.state.page === "camera") {
             return (
-                <View style={StyleService.main.container}>
-                    <Camera style={{}} type={this.state.cameraType} ref={(r) => {camera = r}}>
-                        <View style={StyleService.main.buttonContainer}>
-                        <TouchableOpacity style={StyleService.main.button} onPress={this.toggleCameraType}>
-                            <Text style={StyleService.main.text}>Flip Camera</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={StyleService.main.button} onPress={this.takePhoto}>
-                            <Text style={StyleService.main.text}>Take Photo</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={StyleService.main.button} onPress={() => this.leaveCamera("gallery")}>
-                            <Text style={StyleService.main.text}>Gallery</Text>
-                        </TouchableOpacity>
-                        </View>
-                    </Camera>
+                <View style={{display:'flex', height:"100%", backgroundColor:'black', flex:1, justifyContent:'space-between'}}>
+                    <View style={{flex:1}}>
+                        <Camera ratio="16:9"
+                        style={{
+                            display:'flex',
+                            width:"100%",
+                            aspectRatio:0.5625,
+                            transform:[{scale: 1}, {translateY:0}],
+                            justifyContent:'flex-end',
+                            height:"100%",
+                            position:'absolute'
+                            
+                        }}
+                        type={this.state.cameraType} ref={(r) => {camera = r}}>
+                            <View style={{display:"flex", flexDirection:'row', alignContent:'center', alignItems:'center', justifyContent:'center'}}>
+                                <TouchableOpacity style={{backgroundColor:'transparent',
+                                    width:"10%",
+                                    borderRadius:100,
+                                    aspectRatio:1,
+                                    alignSelf:'center',
+                                    marginBottom:"5%",
+                                    borderColor:"transparent",
+                                    borderWidth:5,
+                                    }}>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={StyleService.main.cameraButton} onPress={this.takePhoto}>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{backgroundColor:'transparent',
+                                    width:"10%",
+                                    borderRadius:100,
+                                    aspectRatio:1,
+                                    alignSelf:'center',
+                                    marginBottom:"5%",
+                                    borderColor:"white",
+                                    borderWidth:5,}} onPress={this.toggleCameraType}>
+                                </TouchableOpacity>
+                            </View>
+                        </Camera>
+                    </View>
                 </View>
             );
         } else if (this.state.page === "loading") {

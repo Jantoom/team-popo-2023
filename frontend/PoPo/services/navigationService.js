@@ -50,12 +50,10 @@ export default class NavigationService {
         if (!NavigationService._screens.has(name)) {
             throw "Screen not registered.";
         }
-
         if (NavigationService._current === name) return;
 
         NavigationService._current = name;
         if (NavigationService._onChange === undefined) return;
-
         NavigationService._onChange(name);
     }
 }
