@@ -1,5 +1,11 @@
 # Team Popo's Frontend Web-based Application
 
+## How To Run
+* cd into PoPo Directory
+* Run "npm install"
+* Run "npm start"
+* Scan barcode on mobile device with expo app
+
 ## Things that belong here
 
 * Entire frontend app, y'all decide how you want to structure it because you know best
@@ -13,5 +19,6 @@
 
 ## Dependencies
 
-* React
-* ??? lol
+* Node.js
+* React Expo
+* React Expo App on Mobile Device
