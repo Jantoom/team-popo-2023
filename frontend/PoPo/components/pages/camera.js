@@ -1,10 +1,9 @@
 import { Camera, CameraType } from 'expo-camera';
-import { Button, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Text, TouchableOpacity, View, Image } from 'react-native';
 import { StyleService } from "../../services/StyleServices.js";
 
 import NavigationService from '../../services/navigationService.js';
 import React from "react";
-
 
 export default class CameraPage extends React.Component {
     /**
@@ -95,7 +94,11 @@ export default class CameraPage extends React.Component {
                                     alignSelf:'center',
                                     marginBottom:"5%",
                                     borderColor:"white",
-                                    borderWidth:5,}} onPress={this.toggleCameraType}>
+                                    borderWidth:0,}} onPress={this.toggleCameraType}>
+                                        <Image source={require("../../assets/flipcamera.png")} style={{height:"90%",
+                                            width:'100%',
+                                            resizeMode:'center', alignSelf:'center', tintColor:"white"}}>
+                                        </Image>
                                 </TouchableOpacity>
                             </View>
                         </Camera>

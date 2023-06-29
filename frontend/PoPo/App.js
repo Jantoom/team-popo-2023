@@ -13,13 +13,14 @@ import { StyleService } from "./services/StyleServices.js";
 
 export default function App() {
     // Register all page components here
+    NavigationService.register("home", React.createElement(HomePage));
     NavigationService.register("camera", React.createElement(CameraPage));
     NavigationService.register("gallery", React.createElement(GalleryPage));
-    NavigationService.register("home", React.createElement(HomePage));
+    
 
     return (
-        <View style={StyleService.main.outerContainer}>
+        <SafeAreaView style={StyleService.main.outerContainer}>
             <MainLayout />
-        </View>
+        </SafeAreaView>
   );
 }
