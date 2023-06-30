@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform, StatusBar } from "react-native";
 
 /**
  * Service for accessing the stylesheet.
@@ -12,7 +12,8 @@ export class StyleService {
             flex: 1,
             alignContext: 'center',
             justifyContent: 'center',
-            backgroundColor: 'transparent'
+            backgroundColor: 'black',
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
         buttonContainer: {
           flex: 1,
@@ -20,10 +21,15 @@ export class StyleService {
           backgroundColor: 'transparent',
           margin: 64,
         },
-        button: {
+        navButton: {
           flex: 1,
           alignItems: 'center',
-          justifyContent:'center'
+          justifyContent:'center',
+        },
+        navButtonImage: {
+          height:"50%",
+          width:'100%',
+          resizeMode:'center'
         },
         cameraButton: {
           backgroundColor:'transparent',

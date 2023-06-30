@@ -1,10 +1,9 @@
 import { Camera, CameraType } from 'expo-camera';
-import { Button, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Text, TouchableOpacity, View, Image } from 'react-native';
 import { StyleService } from "../../services/StyleServices.js";
 
 import NavigationService from '../../services/navigationService.js';
 import React from "react";
-
 
 export default class CameraPage extends React.Component {
     /**
@@ -29,7 +28,9 @@ export default class CameraPage extends React.Component {
         }
 
         this.takePhoto = async () => {
-            const photo = await camera.takePictureAsync({skipProcessing: true});    
+            const photo = await camera.takePictureAsync();    
+            console.log(photo)
+            NavigationService.navigate("report")
         }
 
         this.requestPermission = async () => {
@@ -76,26 +77,35 @@ export default class CameraPage extends React.Component {
                         }}
                         type={this.state.cameraType} ref={(r) => {camera = r}}>
                             <View style={{display:"flex", flexDirection:'row', alignContent:'center', alignItems:'center', justifyContent:'center'}}>
-                                <TouchableOpacity style={{backgroundColor:'transparent',
-                                    width:"10%",
-                                    borderRadius:100,
-                                    aspectRatio:1,
-                                    alignSelf:'center',
-                                    marginBottom:"5%",
-                                    borderColor:"transparent",
-                                    borderWidth:5,
-                                    }}>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={StyleService.main.cameraButton} onPress={this.takePhoto}>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{backgroundColor:'transparent',
+                                <TouchableOpacity style={{
                                     width:"10%",
                                     borderRadius:100,
                                     aspectRatio:1,
                                     alignSelf:'center',
                                     marginBottom:"5%",
                                     borderColor:"white",
-                                    borderWidth:5,}} onPress={this.toggleCameraType}>
+                                    borderWidth:0,}} onPress={() => NavigationService.navigate("gallery")}>
+                                        <Image source={require("../../assets/gallery.png")} style={{height:"90%",
+                                            width:'100%',
+                                            resizeMode:'center', alignSelf:'center', tintColor:"white"}}>
+                                        </Image>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={StyleService.main.cameraButton} onPress={this.takePhoto}>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{
+                                    width:"10%",
+                                    borderRadius:100,
+                                    aspectRatio:1,
+                                    alignSelf:'center',
+                                    marginBottom:"5%",
+                                    borderColor:"white",
+                                    borderWidth:0,}} onPress={this.toggleCameraType}>
+                                        <Image source={require("../../assets/flipcamera.png")} style={{height:"90%",
+                                            width:'100%',
+                                            resizeMode:'center', alignSelf:'center', tintColor:"white"}}>
+                                        </Image>
                                 </TouchableOpacity>
                             </View>
                         </Camera>
