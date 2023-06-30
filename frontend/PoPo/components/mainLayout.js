@@ -27,7 +27,7 @@ export default class MainLayout extends React.Component {
                     <TouchableOpacity style={StyleService.main.navButton} onPress={() => NavigationService.navigate("camera")}>
                         <Image resizeMode="center" source={require("../assets/camera.png")} style={StyleService.main.navButtonImage}></Image>
                     </TouchableOpacity>
-                    <TouchableOpacity style={StyleService.main.navButton} onPress={() => NavigationService.navigate("gallery")}>
+                    <TouchableOpacity style={StyleService.main.navButton} onPress={() => NavigationService.navigate("profile")}>
                         <Image resizeMode="center" source={require("../assets/profile.png")} style={StyleService.main.navButtonImage}></Image>
                     </TouchableOpacity>
                 </View>

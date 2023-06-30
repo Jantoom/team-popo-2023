@@ -33,6 +33,10 @@ export default class GalleryPage extends React.Component {
             FileService.deleteFile(imageURI)      
             this.updateImageLibrary()
         }
+
+        this.selectIamge = (imageURI) => {
+            NavigationService.navigate("report")
+        }
     }
 
     async componentDidMount() {
@@ -49,7 +53,7 @@ export default class GalleryPage extends React.Component {
                     <View style={{display: "flex", flexDirection:'row',flexWrap:'wrap'}}>
                         {this.state.images.map((item, index) => {
                             return (
-                                <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.deleteImage(item["fileURI"])}}>
+                                <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.selectIamge(item["fileURI"])}}>
                                     <Image source={{uri: item["fileURI"]}} style={{flex:1, borderRadius:10}}></Image>
                                 </TouchableHighlight>
                             )

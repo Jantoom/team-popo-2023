@@ -28,7 +28,9 @@ export default class CameraPage extends React.Component {
         }
 
         this.takePhoto = async () => {
-            const photo = await camera.takePictureAsync({skipProcessing: true});    
+            const photo = await camera.takePictureAsync();    
+            console.log(photo)
+            NavigationService.navigate("report")
         }
 
         this.requestPermission = async () => {
@@ -75,19 +77,24 @@ export default class CameraPage extends React.Component {
                         }}
                         type={this.state.cameraType} ref={(r) => {camera = r}}>
                             <View style={{display:"flex", flexDirection:'row', alignContent:'center', alignItems:'center', justifyContent:'center'}}>
-                                <TouchableOpacity style={{backgroundColor:'transparent',
+                                <TouchableOpacity style={{
                                     width:"10%",
                                     borderRadius:100,
                                     aspectRatio:1,
                                     alignSelf:'center',
                                     marginBottom:"5%",
-                                    borderColor:"transparent",
-                                    borderWidth:5,
-                                    }}>
+                                    borderColor:"white",
+                                    borderWidth:0,}} onPress={() => NavigationService.navigate("gallery")}>
+                                        <Image source={require("../../assets/gallery.png")} style={{height:"90%",
+                                            width:'100%',
+                                            resizeMode:'center', alignSelf:'center', tintColor:"white"}}>
+                                        </Image>
                                 </TouchableOpacity>
+
                                 <TouchableOpacity style={StyleService.main.cameraButton} onPress={this.takePhoto}>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{backgroundColor:'transparent',
+
+                                <TouchableOpacity style={{
                                     width:"10%",
                                     borderRadius:100,
                                     aspectRatio:1,
