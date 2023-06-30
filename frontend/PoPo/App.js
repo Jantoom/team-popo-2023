@@ -1,6 +1,7 @@
 import { Camera, CameraType } from 'expo-camera';
 import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+
 import GalleryPage from './components/pages/gallery.js';
 import CameraPage from './components/pages/camera.js';
 import HomePage from './components/pages/home.js';
