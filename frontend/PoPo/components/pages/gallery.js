@@ -23,12 +23,6 @@ export default class GalleryPage extends React.Component {
             })
         }
 
-        this.sendImage = async (fileURI) => {
-            fileData = FileService.readFile(fileURI)
-            console.log("Sending Image")
-            APIService.sendData()            
-        }
-
         this.deleteImage = (imageURI) => {
             FileService.deleteFile(imageURI)      
             this.updateImageLibrary()
@@ -54,7 +48,12 @@ export default class GalleryPage extends React.Component {
                         {this.state.images.map((item, index) => {
                             return (
                                 <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.selectIamge(item["fileURI"])}}>
-                                    <Image source={{uri: item["fileURI"]}} style={{flex:1, borderRadius:10}}></Image>
+                                    <View style={{flex:1}}>
+                                        <Image source={{uri: item["fileURI"]}} style={{flex:1, borderRadius:10}}></Image>
+                                        <TouchableHighlight onPress={() => this.deleteImage(item["fileURI"])} style={{position:'absolute', width:25, aspectRatio:1, alignSelf:"flex-end", margin:5}}>
+                                            <Image resizeMode='center' source={require("../../assets/bin.png")} style={{tintColor:"red",flex:1, width:"100%"}}></Image>
+                                        </TouchableHighlight>
+                                    </View>
                                 </TouchableHighlight>
                             )
                         })}

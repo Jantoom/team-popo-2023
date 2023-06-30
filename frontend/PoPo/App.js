@@ -22,7 +22,6 @@ export default function App() {
     NavigationService.register("gallery", React.createElement(GalleryPage));
     NavigationService.register("profile", React.createElement(ProfilePage));
     
-
     return (
         <SafeAreaView style={StyleService.main.outerContainer}>
             <MainLayout />
