@@ -1,18 +1,40 @@
 export default class APIService {
-    static API_ADDRESS = "10.194.139.183:6400"
+    static API_ADDRESS = "http://10.194.139.183:6400/api/v1/violations"
 
-    static sendData = (
-        data = {data:"Test Data"},
+    static sendData = async (
+        formData,
         address = this.API_ADDRESS
     ) => { 
+        response = await fetch(address, {
+                method: 'POST',
+                body: formData,
+            }).catch((reason) => {
+                console.log(reason)
+                response = undefined
+            })
+        
+        return response
+    }
 
-        response = fetch(`http://${address}/api/v1/users/health`, {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-type": "multipart/form-data; charset=UTF-8"
-                }
-            }).then(response => console.log(response))
+    static sendReport = async (imageURI, type, extraComments) => {
+        let formData = new FormData();
+            formData.append("image", {
+                uri: imageURI,
+                type: "image/png",
+                name: "image.png",
+            })
+        formData.append("type", type)
+        formData.append("extra_comments", extraComments)
 
+        response = await this.sendData(formData, "http://10.194.139.183:6400/api/v1/violations")
+        if (response !== undefined) {
+            if (response.status === 201) {
+                // Report Upload Success :)
+                return true
+            } else {
+                // Report Upload Failed :(
+            }
+        }
+        return false
     }
 }

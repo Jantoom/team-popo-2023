@@ -2,7 +2,6 @@
 import { ScrollView, View, Image, Text, TouchableHighlight, Button, ImageBackground } from 'react-native';
 import React from "react";
 import {Picker} from '@react-native-picker/picker';
-import FileService from '../../services/fileService';
 import { TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native';
 import NavigationService from '../../services/navigationService';
@@ -10,6 +9,17 @@ import APIService from '../../services/restAPIService';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class ReportPage extends React.Component {
+
+    static reportImageURI = ""
+
+    static setReportImage = (imageURI) => {
+        this.reportImageURI = imageURI
+    }
+
+    static getReportImage = () => {
+        return this.reportImageURI
+    }
+
     /**
      * Instantiates the component.
      * @param {object} props Properties
@@ -31,46 +41,29 @@ export default class ReportPage extends React.Component {
         }
 
         this.sendImage = async () => {
-            this.setState({isLoading: true, errorOccured: false})
-            console.log("Sending Image")
-
-            let formData = new FormData();
-            formData.append("image", {
-                uri: this.state.imageURI,
-                type: "image/png",
-                name: "image.png",
-            })
-
-            formData.append("type", this.state.dropdownValue)
-            formData.append("extra_comments", this.state.extraComments)
+            console.log("Sending Report")
             
-            response = await fetch('http://10.194.139.183:6400/api/v1/violations', {
-                method: 'POST',
-                body: formData,
-            }).catch((reason) => {
-                console.log(reason)
-                response = undefined
-            })
-            if (response !== undefined) {
-                if (response.status === 201) {
-                    // Image Upload Success :)
-                    console.log("Image Uploaded Successfully :)")
-                    this.setState({isLoading: false})
-                    return
-                } else {
-                    // Image Upload Failed :(
-                    console.log("Image Failed Upload :'(")
-                }
+            this.setState({isLoading: true, errorOccured: false})
+            success = await APIService.sendReport(this.state.imageURI, this.state.dropdownValue, this.state.extraComments)
+            
+            if (success) {
+                console.log("Report Uploaded Successfully :)")
+                this.setState({
+                    isLoading: false,
+                    errorOccured: false
+                })
+            } else {
+                console.log("Report Failed Upload :(")
+                this.setState({
+                    isLoading: false,
+                    errorOccured: true
+                })
             }
-            this.setState({
-                isLoading: false,
-                errorOccured: true
-            })
         }
     }
 
     async componentDidMount() {
-        this.setState({imageURI: (await FileService.getCacheFiles()).pop()["fileURI"]})
+        this.setState({imageURI: ReportPage.getReportImage()})
     }
 
     /**

@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import NavigationService from '../../services/navigationService.js';
 import { StyleService } from "../../services/StyleServices.js";
 import APIService from '../../services/restAPIService.js';
+import ReportPage from './report.js';
 
 export default class GalleryPage extends React.Component {
     /**
@@ -29,6 +30,7 @@ export default class GalleryPage extends React.Component {
         }
 
         this.selectIamge = (imageURI) => {
+            ReportPage.setReportImage(imageURI)
             NavigationService.navigate("report")
         }
     }
