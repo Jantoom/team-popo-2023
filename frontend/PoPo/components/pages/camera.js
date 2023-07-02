@@ -5,6 +5,7 @@ import { StyleService } from "../../services/StyleServices.js";
 import NavigationService from '../../services/navigationService.js';
 import React from "react";
 import ReportPage from './report.js';
+import MainLayout from '../mainLayout.js';
 
 export default class CameraPage extends React.Component {
     /**
@@ -30,8 +31,8 @@ export default class CameraPage extends React.Component {
 
         this.takePhoto = async () => {
             const photo = await camera.takePictureAsync({quality:0});
-            
-            ReportPage.setReportImage(photo.uri)
+
+            MainLayout.mainLay.setState({reportImage: photo.uri})
             NavigationService.navigate("report")
         }
 
@@ -56,6 +57,12 @@ export default class CameraPage extends React.Component {
         if (!this.state.permission.granted) {
             this.setState({page: "permissions"})
         }
+
+        MainLayout.mainLay.setState({padTop: false})
+    }
+
+    componentWillUnmount() {
+        MainLayout.mainLay.setState({padTop: true})
     }
 
     /**

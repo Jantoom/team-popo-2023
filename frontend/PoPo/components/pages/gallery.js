@@ -5,6 +5,7 @@ import NavigationService from '../../services/navigationService.js';
 import { StyleService, Colors } from "../../services/StyleServices.js";
 import APIService from '../../services/restAPIService.js';
 import ReportPage from './report.js';
+import MainLayout from '../mainLayout.js';
 
 export default class GalleryPage extends React.Component {
     /**
@@ -30,7 +31,7 @@ export default class GalleryPage extends React.Component {
         }
 
         this.selectIamge = (imageURI) => {
-            ReportPage.setReportImage(imageURI)
+            MainLayout.mainLay.setState({reportImage: imageURI})
             NavigationService.navigate("report")
         }
     }

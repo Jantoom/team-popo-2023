@@ -34,11 +34,13 @@ export class StyleService {
         },
         outerContainer: {
             flex: 1,
-            alignContext: 'center',
-            justifyContent: 'center',
             backgroundColor: 'black',
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
+        outerContainerNoPad: {
+          flex: 1,
+          backgroundColor: 'black',
+      },
         buttonContainer: {
           flex: 1,
           flexDirection: 'row',
@@ -49,7 +51,12 @@ export class StyleService {
           flex: 1,
           alignItems: 'center',
           justifyContent:'center',
-
+        },
+        activeNavButton: {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent:'center',
+          backgroundColor: "#6C9AF0"
         },
         navButtonImage: {
           height:"50%",
