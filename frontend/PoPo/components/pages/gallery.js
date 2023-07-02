@@ -2,7 +2,7 @@ import FileService from '../../services/fileService.js'
 import { ScrollView, View, Image, Text, TouchableHighlight, Button } from 'react-native';
 import React, { useEffect } from "react";
 import NavigationService from '../../services/navigationService.js';
-import { StyleService } from "../../services/StyleServices.js";
+import { StyleService, Colors } from "../../services/StyleServices.js";
 import APIService from '../../services/restAPIService.js';
 import ReportPage from './report.js';
 
@@ -45,6 +45,7 @@ export default class GalleryPage extends React.Component {
     render() {
         return (
             <View style={{display:"flex", flex:1, padding:10}}>
+                <Image source={require("../../assets/background_image.png")} style={StyleService.main.backgroundImage}></Image>
                 <ScrollView style={{display: "flex"}}>
                     <View style={{display: "flex", flexDirection:'row',flexWrap:'wrap'}}>
                         {this.state.images.map((item, index) => {
@@ -61,7 +62,7 @@ export default class GalleryPage extends React.Component {
                         })}
                     </View>
                 </ScrollView>
-                {this.state.images.length == 0 ? <Text style={{color:"#dddddd", alignSelf:'center', bottom:"48%"}}>No Images Found</Text> : <></>}
+                {this.state.images.length == 0 ? <Text style={{color:Colors.main.textColor, alignSelf:'center', bottom:"48%"}}>No Images Found</Text> : <></>}
                 
             </View>
         );

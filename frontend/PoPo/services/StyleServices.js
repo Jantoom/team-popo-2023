@@ -1,5 +1,21 @@
 import { StyleSheet, Platform, StatusBar } from "react-native";
 
+
+/**
+ * Defines the colour palette used by the app.
+ */
+export class Colors {
+  /**
+   * Primary colour tones
+   */
+  static main = {
+    background: "white",
+    textColor: "black",
+    navBackground: "#A3BFF4",
+    navBackgroundSelected: "#A3BFF4"
+  }
+}
+
 /**
  * Service for accessing the stylesheet.
  */
@@ -8,6 +24,14 @@ export class StyleService {
      * Style sheet for playback components.
      */
     static main = StyleSheet.create({
+        backgroundImage: {
+          alignSelf:'center',
+          flex: 1,
+          position:'absolute',
+          width:"100%",
+          resizeMode:"contain"
+          
+        },
         outerContainer: {
             flex: 1,
             alignContext: 'center',
@@ -25,11 +49,13 @@ export class StyleService {
           flex: 1,
           alignItems: 'center',
           justifyContent:'center',
+
         },
         navButtonImage: {
           height:"50%",
           width:'100%',
-          resizeMode:'center'
+          resizeMode:'center',
+          tintColor:"#808080",
         },
         cameraButton: {
           backgroundColor:'transparent',
