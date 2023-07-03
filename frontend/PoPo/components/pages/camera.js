@@ -4,6 +4,8 @@ import { StyleService } from "../../services/StyleServices.js";
 
 import NavigationService from '../../services/navigationService.js';
 import React from "react";
+import ReportPage from './report.js';
+import MainLayout from '../mainLayout.js';
 
 export default class CameraPage extends React.Component {
     /**
@@ -28,8 +30,9 @@ export default class CameraPage extends React.Component {
         }
 
         this.takePhoto = async () => {
-            const photo = await camera.takePictureAsync();    
-            console.log(photo)
+            const photo = await camera.takePictureAsync({quality:0});
+
+            MainLayout.mainLay.setState({reportImage: photo.uri})
             NavigationService.navigate("report")
         }
 
@@ -54,6 +57,12 @@ export default class CameraPage extends React.Component {
         if (!this.state.permission.granted) {
             this.setState({page: "permissions"})
         }
+
+        MainLayout.mainLay.setState({padTop: false})
+    }
+
+    componentWillUnmount() {
+        MainLayout.mainLay.setState({padTop: true})
     }
 
     /**
@@ -65,17 +74,17 @@ export default class CameraPage extends React.Component {
                 <View style={{display:'flex', height:"100%", backgroundColor:'black', flex:1, justifyContent:'space-between'}}>
                     <View style={{flex:1}}>
                         <Camera ratio="16:9"
-                        style={{
-                            display:'flex',
-                            width:"100%",
-                            aspectRatio:0.5625,
-                            transform:[{scale: 1}, {translateY:0}],
-                            justifyContent:'flex-end',
-                            height:"100%",
-                            position:'absolute'
-                            
-                        }}
-                        type={this.state.cameraType} ref={(r) => {camera = r}}>
+                            style={{
+                                display:'flex',
+                                width:"100%",
+                                aspectRatio:0.5625,
+                                transform:[{scale: 1}, {translateY:0}],
+                                justifyContent:'flex-end',
+                                height:"100%",
+                                position:'absolute'
+                                
+                            }}
+                            type={this.state.cameraType} ref={(r) => {camera = r}}>
                             <View style={{display:"flex", flexDirection:'row', alignContent:'center', alignItems:'center', justifyContent:'center'}}>
                                 <TouchableOpacity style={{
                                     width:"10%",

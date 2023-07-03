@@ -1,5 +1,21 @@
 import { StyleSheet, Platform, StatusBar } from "react-native";
 
+
+/**
+ * Defines the colour palette used by the app.
+ */
+export class Colors {
+  /**
+   * Primary colour tones
+   */
+  static main = {
+    background: "white",
+    textColor: "black",
+    navBackground: "#A3BFF4",
+    navBackgroundSelected: "#A3BFF4"
+  }
+}
+
 /**
  * Service for accessing the stylesheet.
  */
@@ -8,13 +24,23 @@ export class StyleService {
      * Style sheet for playback components.
      */
     static main = StyleSheet.create({
+        backgroundImage: {
+          alignSelf:'center',
+          flex: 1,
+          position:'absolute',
+          width:"100%",
+          resizeMode:"contain"
+          
+        },
         outerContainer: {
             flex: 1,
-            alignContext: 'center',
-            justifyContent: 'center',
             backgroundColor: 'black',
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
+        outerContainerNoPad: {
+          flex: 1,
+          backgroundColor: 'black',
+      },
         buttonContainer: {
           flex: 1,
           flexDirection: 'row',
@@ -26,10 +52,17 @@ export class StyleService {
           alignItems: 'center',
           justifyContent:'center',
         },
+        activeNavButton: {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent:'center',
+          backgroundColor: "#6C9AF0"
+        },
         navButtonImage: {
           height:"50%",
           width:'100%',
-          resizeMode:'center'
+          resizeMode:'center',
+          tintColor:"#808080",
         },
         cameraButton: {
           backgroundColor:'transparent',

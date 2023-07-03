@@ -1,3 +1,5 @@
+import MainLayout from "../components/mainLayout";
+
 /**
  * Service that provides navigation between screens.
  */
@@ -47,6 +49,10 @@ export default class NavigationService {
      * @param { string } name Name of screen.
      */
     static navigate(name) {
+        MainLayout.mainLay.setState({activeNavButton: name})
+
+
+
         if (!NavigationService._screens.has(name)) {
             throw "Screen not registered.";
         }
