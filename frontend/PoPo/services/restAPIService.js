@@ -67,6 +67,29 @@ export default class APIService {
                 accessToken = responseContent["access_token"]
                 APIService.ACCESS_TOKEN = accessToken
 
+                return {success:true, reason:""}
+            } else {
+                // Failed Login
+                return {success:false, reason:"Username or password incorrect"}
+            }
+        }
+        console.log("login failed")
+        return {success:false, reason:"Server not found"}
+    }
+
+    static signup = async (username, password) => {
+        let formData = new FormData();
+        formData.append("username", username)
+        formData.append("password", password)
+
+        response = await this.sendData(formData, "http://10.194.139.183:6400/api/v1/auth/login")
+        if (response !== undefined) {
+            if (response.status === 200) {
+                // Success Login
+                responseContent = await response.json()
+                accessToken = responseContent["access_token"]
+                APIService.ACCESS_TOKEN = accessToken
+
                 return true
             } else {
                 // Failed Login

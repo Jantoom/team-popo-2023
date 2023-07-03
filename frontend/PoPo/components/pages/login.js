@@ -28,6 +28,7 @@ export default class LoginPage extends React.Component {
           password: "123",
           isLoading: false,
           errorOccured: false,
+          errorText: ""
         }
 
         this.login = async () => {
@@ -36,14 +37,22 @@ export default class LoginPage extends React.Component {
             return false
           }
           this.setState({isLoading: true, errorOccured: false})
-          success = await APIService.login(this.state.username, this.state.password)
-          console.log(success)
-          if (success) {
+          loginValues = await APIService.login(this.state.username, this.state.password)
+          
+          if (loginValues.success) {
             this.setState({isLoading: false})
             NavigationService.navigate("home")
           } else {
-            this.setState({isLoading: false, errorOccured: true})
+            this.setState({
+              isLoading: false,
+              errorOccured: true,
+              errorText: loginValues.reason
+            })
           }
+
+          if (MainLayout.mainLay.state.debug) {
+            NavigationService.navigate("home")
+          } 
         }
     }
 
@@ -65,7 +74,7 @@ export default class LoginPage extends React.Component {
                 <TextInput value={this.state.username} onChangeText={(newValue) => this.setState({username: newValue})} placeholder="Username" style={{color:"black", borderWidth:1, padding:15, borderRadius:10, marginBottom:20}}></TextInput>
                 <TextInput value={this.state.password} onChangeText={(newValue) => this.setState({password: newValue})} placeholder="Password" style={{color:"black", borderWidth:1, padding:15, borderRadius:10}}></TextInput>
                 
-                {this.state.errorOccured == true ? <Text style={{color:"red", alignSelf:"center"}}>Username or password incorrect</Text> : <></>}
+                {this.state.errorOccured == true ? <Text style={{color:"red", alignSelf:"center"}}>{this.state.errorText}</Text> : <></>}
 
                 <View style={{display:"flex", flexDirection:"row", marginTop:20}}>
                   <TouchableHighlight style={{padding:10, flex:1, marginRight:10}}>

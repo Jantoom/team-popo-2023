@@ -58,11 +58,11 @@ export default class CameraPage extends React.Component {
             this.setState({page: "permissions"})
         }
 
-        MainLayout.mainLay.setState({padTop: false})
+        MainLayout.mainLay.setState({padTop: false, navBorderRad: 0})
     }
 
     componentWillUnmount() {
-        MainLayout.mainLay.setState({padTop: true})
+        MainLayout.mainLay.setState({padTop: true, navBorderRad: 30})
     }
 
     /**

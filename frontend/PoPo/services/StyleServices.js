@@ -56,7 +56,9 @@ export class StyleService {
           flex: 1,
           alignItems: 'center',
           justifyContent:'center',
-          backgroundColor: "#6C9AF0"
+          backgroundColor: "#6C9AF0",
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30
         },
         navButtonImage: {
           height:"50%",
