@@ -2,12 +2,12 @@
 ### in the VSCode Marketplace to use these endpoints
 
 ### Base URL to connect to
-@localDns = 10.194.139.183:6400
+@localDns = 127.0.0.1:6400
 @serverDns = null
 @baseUrl = http://{{localDns}}/api/v1
 
 ### ------------------------------ USERS ------------------------------
-@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4Nzc1MDg2NywianRpIjoiOTQ2YzNiYjktNmI5Ny00ZDAyLTlhNDItMmYzZTA2YzMxZDRiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjYyNTBmYzE1LWIyMWItNGY3Ni05NTMzLTc2M2Y5OGQ4MzIzMiIsIm5iZiI6MTY4Nzc1MDg2NywiZXhwIjoxNjg3NzY4ODY3fQ.2qtYb6w8czHcuoFU0uT5ABjgFDK0PzmSrkfQWMCDqDU
+@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4ODM0ODc3NiwianRpIjoiMDM3Njk1OWYtZmY1ZS00ZWUyLWJhZDEtYmVlMTg4YzI5MTdhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjBkZjA2YTE4LWFlYTItNGRmYi05NDhiLWU2YzBjY2EyNjVhMSIsIm5iZiI6MTY4ODM0ODc3NiwiZXhwIjoxNjg4MzY2Nzc2fQ.csnE01mEWWmNJ2X-7k5znWo5RkweUbhy-YMMm9Ifxsc
 
 ### Query the health of the user service.
 GET {{baseUrl}}/users/health
@@ -17,14 +17,14 @@ POST {{baseUrl}}/users/signup
 Content-Type: application/x-www-form-urlencoded
 
 &email=sementha2@example.org
-&username=sementha2
+&username=sementha
 &password=123
 
 ### Logs in a user.
 POST {{baseUrl}}/users/login
 Content-Type: application/x-www-form-urlencoded
 
-&username=sementha2
+&username=sementha
 &password=123
 
 ### Logs out a user.

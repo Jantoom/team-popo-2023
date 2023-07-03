@@ -1,11 +1,10 @@
 from botocore.exceptions import ClientError
-from flask import jsonify, request
+from flask import jsonify
 from flask_jwt_extended import jwt_required
-from core.schemas import parse_input
-from core.services import violation_service
-from core.util import unknown_error
+from core.util import parse_input, unknown_error
 from violation import api
 from violation.schemas import GetViolationListRequest, UploadViolationRequest
+from violation.services import violation_service
 
 @api.route('', methods=['GET'])
 @jwt_required()
@@ -28,7 +27,7 @@ def get_violation_list():
         return unknown_error(e)
 
 @api.route('', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def upload_violation():
     """Upload a new violation to the marketplace."""
     try:

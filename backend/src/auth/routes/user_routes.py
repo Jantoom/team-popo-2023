@@ -1,9 +1,8 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token, jwt_required
-from core.util import unknown_error
-from core.schemas import parse_input
-from core.services import user_service
+from core.util import parse_input, unknown_error
 from auth import api
+from auth.services import user_service
 from auth.schemas import SignupUserRequest, LoginUserRequest, LogoutUserRequest
 
 @api.route('/signup', methods=['POST'])

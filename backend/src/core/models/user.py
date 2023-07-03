@@ -1,5 +1,5 @@
 import uuid
-from core.services import db
+from core import db
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -9,7 +9,7 @@ class User(db.Model):
     username = db.Column(db.String(64), nullable=False, unique=True)
     password_hash = db.Column(db.String(120), nullable=False)
     points = db.Column(db.Integer, nullable=False, default=0)
-    uploaded_violations = db.relationship('Violation', backref='uploader', lazy='dynamic')
+    #uploaded_violations = db.relationship('Violation', backref='uploader', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -23,5 +23,14 @@ class User(db.Model):
     def get_id(self):
         return str(self.id)
     
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'username': self.username,
+            'password_hash': self.password_hash,
+            'points': self.points
+        }
+
     def __repr__(self):
         return f'<User({self.id}, {self.email}, {self.username}, {self.password_hash}, {self.points})>'

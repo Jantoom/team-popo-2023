@@ -1,14 +1,7 @@
 from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
-from core.services import db, jwt_manager
-from core.models.user import User
-    
-@jwt_manager.user_identity_loader
-def load_user(user_id) -> User:
-    user = db.session.scalars(db.
-            select(User).
-            where(User.id == user_id)).first()
-    return user.id
+from core import db
+from core.models import User
 
 def signup_user(data: dict) -> User:
         user = User(

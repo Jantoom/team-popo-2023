@@ -12,10 +12,8 @@ WORKDIR /app
 # Install pipenv dependencies
 COPY backend/Pipfile backend/Pipfile.lock ./
 RUN pipenv install --system --deploy
-
-# # Copying our AWS credentials
-# COPY credentials /root/.aws/credentials
-
+# Copying our AWS credentials
+COPY credentials /root/.aws/credentials
 # Copying our application into the container
 COPY backend/src/core core
 COPY backend/src/auth auth
