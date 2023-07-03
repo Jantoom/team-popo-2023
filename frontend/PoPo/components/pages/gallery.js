@@ -1,6 +1,6 @@
 import FileService from '../../services/fileService.js'
 import { ScrollView, View, Image, Text, TouchableHighlight, Button } from 'react-native';
-import React, { useEffect } from "react";
+import React, { cloneElement, useEffect } from "react";
 import NavigationService from '../../services/navigationService.js';
 import { StyleService, Colors } from "../../services/StyleServices.js";
 import APIService from '../../services/restAPIService.js';
@@ -54,8 +54,8 @@ export default class GalleryPage extends React.Component {
                                 <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.selectIamge(item["fileURI"])}}>
                                     <View style={{flex:1}}>
                                         <Image source={{uri: item["fileURI"]}} style={{flex:1, borderRadius:10}}></Image>
-                                        <TouchableHighlight onPress={() => this.deleteImage(item["fileURI"])} style={{position:'absolute', width:25, aspectRatio:1, alignSelf:"flex-end", margin:5}}>
-                                            <Image resizeMode='center' source={require("../../assets/bin.png")} style={{tintColor:"red",flex:1, width:"100%"}}></Image>
+                                        <TouchableHighlight onPress={() => this.deleteImage(item["fileURI"])} style={{position:'absolute', width:20, aspectRatio:1, alignSelf:"flex-end", right:5, top:5, backgroundColor:"white", justifyContent:'center', borderRadius:50}}>
+                                            <Text style={{color:"red", alignSelf:'center', fontWeight:'bold', verticalAlign:'middle'}}>X</Text>
                                         </TouchableHighlight>
                                     </View>
                                 </TouchableHighlight>

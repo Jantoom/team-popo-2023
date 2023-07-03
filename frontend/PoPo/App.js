@@ -8,6 +8,7 @@ import LoginPage from './components/pages/login.js';
 import ReportPage from './components/pages/report.js';
 import ProfilePage from './components/pages/profile.js';
 import HomePage from './components/pages/home.js';
+import SignUpPage from './components/pages/signup.js';
 
 import React from 'react';
 import NavigationService from './services/navigationService';
@@ -16,6 +17,7 @@ import MainLayout from './components/mainLayout';
 export default function App() {
     // Register all page components here
     NavigationService.register("login", React.createElement(LoginPage));
+    NavigationService.register("signup", React.createElement(SignUpPage));
     NavigationService.register("home", React.createElement(HomePage));
     NavigationService.register("report", React.createElement(ReportPage));
     NavigationService.register("camera", React.createElement(CameraPage));

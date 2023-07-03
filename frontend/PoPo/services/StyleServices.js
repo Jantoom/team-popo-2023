@@ -1,5 +1,5 @@
 import { StyleSheet, Platform, StatusBar } from "react-native";
-
+import * as Font from "expo-font";
 
 /**
  * Defines the colour palette used by the app.
@@ -13,6 +13,30 @@ export class Colors {
     textColor: "black",
     navBackground: "#A3BFF4",
     navBackgroundSelected: "#A3BFF4"
+  }
+}
+
+/**
+ * Defines the fonts used by the app.
+ */
+export class Fonts {
+  static _isReady = false;
+
+  static async init() {
+      if (Fonts._isReady) return;
+
+      await Font.loadAsync("B612", require("../assets/fonts/B612.ttf"));
+      if (!Font.isLoaded("B612")) return;
+
+      Fonts._isReady = true;
+      return;
+  }
+
+  static async ready() {
+      if (Fonts._isReady) return true;
+
+      await Fonts.init();
+      return Fonts._isReady;
   }
 }
 

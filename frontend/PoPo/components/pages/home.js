@@ -4,6 +4,7 @@ import React, { cloneElement } from "react";
 import { ImageBackground } from 'react-native';
 import { StyleService, Colors } from '../../services/StyleServices';
 import { TextInput } from 'react-native';
+import NavigationService from '../../services/navigationService';
 
 export default class HomePage extends React.Component {
     /**
@@ -24,34 +25,34 @@ export default class HomePage extends React.Component {
 
                 <ScrollView style={{paddingHorizontal:"2%"}}>
                     <View style={{backgroundColor:"#DEE9FF", margin:20, borderRadius:5, padding:20, marginTop:70}}>
-                        <Text style={{marginBottom:5}}>POINTS</Text>
-                        <Text style={{alignSelf:'center', fontSize:50}}>1094</Text>
+                        <Text style={{marginBottom:5, fontFamily:"B612"}}>POINTS</Text>
+                        <Text style={{alignSelf:'center', fontSize:50, fontFamily:"B612", letterSpacing:5}}>1094</Text>
                     </View>
 
                     <View style={{backgroundColor:"#DEE9FF", margin:20, borderRadius:5, padding:8}}>
-                        <Text style={{marginBottom:5, marginTop:5, marginLeft:5}}>QUICK START</Text>
+                        <Text style={{marginBottom:5, marginTop:5, marginLeft:5, fontFamily:"B612"}}>QUICK START</Text>
                         <View style={{display:"flex", flexDirection:'row', flexWrap:'wrap'}}>
-                            <TouchableHighlight style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
-                                <View style={{flex:1}}>
-                                    <Image style={{flex:1,width:"100%", resizeMode:'contain', alignSelf:'center'}} source={require("../../assets/parking-violation.png")}></Image>
+                            <TouchableHighlight onPress={() => NavigationService.navigate("camera")} style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
+                                <View style={{flex:1, backgroundColor:"white", borderRadius: 5}}>
+                                    <Image style={{flex:1,width:"100%", height:"100%", alignSelf:'center'}} source={require("../../assets/parking-violation.png")}></Image>
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
-                                <View style={{flex:1}}>
-                                    <Image style={{flex:1,width:"100%", resizeMode:'contain', alignSelf:'center'}} source={require("../../assets/traffic-light-violation.png")}></Image>
+                            <TouchableHighlight onPress={() => NavigationService.navigate("camera")} style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
+                                <View style={{flex:1, backgroundColor:"white", borderRadius: 5}}>
+                                    <Image style={{flex:1,width:"100%", height:"100%", alignSelf:'center'}} source={require("../../assets/traffic-light-violation.png")}></Image>
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
-                                <View style={{flex:1}}>
-                                    <Image style={{flex:1,width:"100%", resizeMode:'contain', alignSelf:'center'}} source={require("../../assets/aggressive-driving.png")}></Image>
+                            <TouchableHighlight onPress={() => NavigationService.navigate("camera")} style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
+                                <View style={{flex:1, backgroundColor:"white", borderRadius: 5}}>
+                                    <Image style={{flex:1,width:"100%", height:"100%", alignSelf:'center'}} source={require("../../assets/aggressive-driving.png")}></Image>
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
-                                <View style={{flex:1}}>
-                                    <Image style={{flex:1,width:"100%", resizeMode:'contain', alignSelf:'center'}} source={require("../../assets/littering.png")}></Image>
+                            <TouchableHighlight onPress={() => NavigationService.navigate("camera")} style={{backgroundColor:"white", alignContent:'center', alignSelf:'center', width:"46%", aspectRatio:0.9, margin:"2%", borderRadius:5}}>
+                                <View style={{flex:1, backgroundColor:"white", borderRadius: 5}}>
+                                    <Image style={{flex:1,width:"100%", height:"100%", alignSelf:'center'}} source={require("../../assets/littering.png")}></Image>
                                 </View>
                             </TouchableHighlight>
                         </View>             

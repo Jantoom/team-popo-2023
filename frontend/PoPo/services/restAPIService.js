@@ -1,5 +1,7 @@
+import { getContentUriAsync } from "expo-file-system"
+
 export default class APIService {
-    static API_ADDRESS = "http://10.194.139.183:6400/api/v1/violations"
+    static API_ADDRESS = "http://popo-1349446900.us-east-1.elb.amazonaws.com"
     static ACCESS_TOKEN = ""
 
 
@@ -23,8 +25,6 @@ export default class APIService {
     }
 
     static sendReport = async (imageURI, type, extraComments) => {
-        console.log("ACCESS TOKEN")
-        console.log(this.ACCESS_TOKEN)
         let formData = new FormData();
             formData.append("image", {
                 uri: imageURI,
@@ -34,11 +34,11 @@ export default class APIService {
         formData.append("type", type)
         formData.append("extra_comments", extraComments)
 
-
-
-        response = await this.sendData(formData, "http://10.194.139.183:6400/api/v1/violations")
+        response = await this.sendData(formData, `${APIService.API_ADDRESS}/api/v1/violations`)
         
         if (response !== undefined) {
+            console.log(response)
+            console.log(await response.text())
             if (response.status === 201) {
                 // Report Upload Success :)
                 return true
@@ -59,7 +59,7 @@ export default class APIService {
         formData.append("username", username)
         formData.append("password", password)
 
-        response = await this.sendData(formData, "http://10.194.139.183:6400/api/v1/auth/login")
+        response = await this.sendData(formData, `${APIService.API_ADDRESS}/api/v1/auth/login`)
         if (response !== undefined) {
             if (response.status === 200) {
                 // Success Login
@@ -77,25 +77,25 @@ export default class APIService {
         return {success:false, reason:"Server not found"}
     }
 
-    static signup = async (username, password) => {
+    static signup = async (username, password, email) => {
         let formData = new FormData();
         formData.append("username", username)
         formData.append("password", password)
+        formData.append("email", email)
 
-        response = await this.sendData(formData, "http://10.194.139.183:6400/api/v1/auth/login")
+        response = await this.sendData(formData, `${APIService.API_ADDRESS}/api/v1/auth/signup`)
+
         if (response !== undefined) {
-            if (response.status === 200) {
-                // Success Login
-                responseContent = await response.json()
-                accessToken = responseContent["access_token"]
-                APIService.ACCESS_TOKEN = accessToken
 
-                return true
+            if (response.status === 201) {
+                // Success SignUp
+                return {success:true, reason:""}
             } else {
-                // Failed Login
+                // Failed SignUp
+                return {success:false, reason:"Could Not Create Account"}
             }
         }
-        console.log("login failed")
-        return false
+
+        return {success:false, reason:"Server not found"}
     }
 }

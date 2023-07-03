@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationComponent } from './navigationComponent';
 import { TouchableOpacity, View, Image, SafeAreaView } from 'react-native';
-import { StyleService, Colors } from '../services/StyleServices';
+import { StyleService, Colors, Fonts } from '../services/StyleServices';
 import NavigationService from '../services/navigationService.js';
 
 /**
@@ -21,7 +21,13 @@ export default class MainLayout extends React.Component {
             activeNavButton: "home",
             hideNav: false,
             navBorderRad: 30,
-            debug: 1
+            debug: 1,
+        }
+    }
+
+    async componentDidMount() {
+        if (!await Fonts.ready()) {
+            console.log("Error Loading Fonts")
         }
     }
 
@@ -33,24 +39,24 @@ export default class MainLayout extends React.Component {
             <SafeAreaView style={this.state.padTop === true ? StyleService.main.outerContainer : StyleService.main.outerContainerNoPad}>
                 <View style={{flex: 1, backgroundColor: Colors.main.background}}>
                     <NavigationComponent style={{flex: 1}}/>
-                    {this.state.hideNav == false ? (
-                        <View style={{borderTopLeftRadius: this.state.navBorderRad, borderTopRightRadius: this.state.navBorderRad, alignSelf:'flex-end', justifyContent:'center', display:'flex', flexDirection:'row', backgroundColor:Colors.main.navBackground, height:"6%", minHeight:50}}>
-                            <TouchableOpacity
-                            style={this.state.activeNavButton == "home" ? StyleService.main.activeNavButton : StyleService.main.navButton}
-                            onPress={() => NavigationService.navigate("home")}>
-                                <Image resizeMode="center" source={require("../assets/home.png")} style={StyleService.main.navButtonImage}></Image>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                            style={this.state.activeNavButton == "camera" || this.state.activeNavButton == "report" ? StyleService.main.activeNavButton : StyleService.main.navButton}
-                            onPress={() => NavigationService.navigate("camera")}>
-                                <Image resizeMode="center" source={require("../assets/camera.png")} style={StyleService.main.navButtonImage}></Image>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                            style={this.state.activeNavButton == "profile" ? StyleService.main.activeNavButton : StyleService.main.navButton}
-                            onPress={() => NavigationService.navigate("profile")}>
-                                <Image resizeMode="center" source={require("../assets/profile.png")} style={StyleService.main.navButtonImage}></Image>
-                            </TouchableOpacity>
-                        </View>
+                        {this.state.hideNav == false ? (
+                            <View style={{borderTopLeftRadius: this.state.navBorderRad, borderTopRightRadius: this.state.navBorderRad, alignSelf:'flex-end', justifyContent:'center', display:'flex', flexDirection:'row', backgroundColor:Colors.main.navBackground, height:"6%", minHeight:50}}>
+                                <TouchableOpacity
+                                style={this.state.activeNavButton == "home" ? StyleService.main.activeNavButton : StyleService.main.navButton}
+                                onPress={() => NavigationService.navigate("home")}>
+                                    <Image resizeMode="center" source={require("../assets/home.png")} style={StyleService.main.navButtonImage}></Image>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                style={this.state.activeNavButton == "camera" || this.state.activeNavButton == "report" || this.state.activeNavButton == "gallery" ? StyleService.main.activeNavButton : StyleService.main.navButton}
+                                onPress={() => NavigationService.navigate("camera")}>
+                                    <Image resizeMode="center" source={require("../assets/camera.png")} style={StyleService.main.navButtonImage}></Image>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                style={this.state.activeNavButton == "profile" ? StyleService.main.activeNavButton : StyleService.main.navButton}
+                                onPress={() => NavigationService.navigate("profile")}>
+                                    <Image resizeMode="center" source={require("../assets/profile.png")} style={StyleService.main.navButtonImage}></Image>
+                                </TouchableOpacity>
+                            </View>
                     ) : <></>}
                     
                 </View>
