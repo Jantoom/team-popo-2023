@@ -4,18 +4,18 @@ import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from '
 
 import GalleryPage from './components/pages/gallery.js';
 import CameraPage from './components/pages/camera.js';
-import HomePage from './components/pages/home.js';
+import LoginPage from './components/pages/login.js';
 import ReportPage from './components/pages/report.js';
 import ProfilePage from './components/pages/profile.js';
+import HomePage from './components/pages/home.js';
 
 import React from 'react';
 import NavigationService from './services/navigationService';
 import MainLayout from './components/mainLayout';
 
-import { StyleService } from "./services/StyleServices.js";
-
 export default function App() {
     // Register all page components here
+    NavigationService.register("login", React.createElement(LoginPage));
     NavigationService.register("home", React.createElement(HomePage));
     NavigationService.register("report", React.createElement(ReportPage));
     NavigationService.register("camera", React.createElement(CameraPage));

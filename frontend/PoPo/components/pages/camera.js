@@ -30,7 +30,7 @@ export default class CameraPage extends React.Component {
         }
 
         this.takePhoto = async () => {
-            const photo = await camera.takePictureAsync({quality:0});
+            const photo = await camera.takePictureAsync();
 
             MainLayout.mainLay.setState({reportImage: photo.uri})
             NavigationService.navigate("report")

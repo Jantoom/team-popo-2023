@@ -18,7 +18,8 @@ export default class MainLayout extends React.Component {
         this.state = {
             padTop: true,
             reportImage: "none",
-            activeNavButton: "home"
+            activeNavButton: "home",
+            hideNav: false
         }
     }
 
@@ -30,7 +31,8 @@ export default class MainLayout extends React.Component {
             <SafeAreaView style={this.state.padTop === true ? StyleService.main.outerContainer : StyleService.main.outerContainerNoPad}>
                 <View style={{flex: 1, backgroundColor: Colors.main.background}}>
                     <NavigationComponent style={{flex: 1}}/>
-                    <View style={{alignSelf:'flex-end', justifyContent:'center', display:'flex', flexDirection:'row', backgroundColor:Colors.main.navBackground, height:"6%", minHeight:50}}>
+                    {this.state.hideNav == false ? (
+                        <View style={{alignSelf:'flex-end', justifyContent:'center', display:'flex', flexDirection:'row', backgroundColor:Colors.main.navBackground, height:"6%", minHeight:50}}>
                         <TouchableOpacity
                         style={this.state.activeNavButton == "home" ? StyleService.main.activeNavButton : StyleService.main.navButton}
                         onPress={() => NavigationService.navigate("home")}>
@@ -47,6 +49,8 @@ export default class MainLayout extends React.Component {
                             <Image resizeMode="center" source={require("../assets/profile.png")} style={StyleService.main.navButtonImage}></Image>
                         </TouchableOpacity>
                     </View>
+                    ) : <></>}
+                    
                 </View>
             </SafeAreaView>
             

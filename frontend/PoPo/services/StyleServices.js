@@ -61,7 +61,7 @@ export class StyleService {
         navButtonImage: {
           height:"50%",
           width:'100%',
-          resizeMode:'center',
+          resizeMode:'contain',
           tintColor:"#808080",
         },
         cameraButton: {

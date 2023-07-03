@@ -37,7 +37,7 @@ export default class ProfilePage extends React.Component {
 
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', marginBottom:10}}>
                         <Text style={{color:Colors.main.textColor}}>Phone: </Text>
-                        <TextInput backgroundColor={"red"} style={{backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>m.hinz@uqconnect.edu.au</TextInput>
+                        <TextInput backgroundColor={"red"} style={{backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>13009467623</TextInput>
                     </View>
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', alignContent:'center'}}>
                         <Text style={{color:Colors.main.textColor, fontSize:17}}>POINTS: </Text>
