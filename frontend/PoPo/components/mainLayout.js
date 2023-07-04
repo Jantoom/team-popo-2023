@@ -3,6 +3,7 @@ import { NavigationComponent } from './navigationComponent';
 import { TouchableOpacity, View, Image, SafeAreaView } from 'react-native';
 import { StyleService, Colors, Fonts } from '../services/StyleServices';
 import NavigationService from '../services/navigationService.js';
+import DimensionService from '../services/dimensionService';
 
 /**
  * Component that defines the shared layout between all screens. Implement
@@ -29,6 +30,8 @@ export default class MainLayout extends React.Component {
         if (!await Fonts.ready()) {
             console.log("Error Loading Fonts")
         }
+
+        DimensionService.initEventListener()
     }
 
     /**
@@ -36,7 +39,7 @@ export default class MainLayout extends React.Component {
      */
     render() {
         return (
-            <SafeAreaView style={this.state.padTop === true ? StyleService.main.outerContainer : StyleService.main.outerContainerNoPad}>
+            <SafeAreaView style={this.state.padTop === true && false ? StyleService.main.outerContainer : StyleService.main.outerContainerNoPad}>
                 <View style={{flex: 1, backgroundColor: Colors.main.background}}>
                     <NavigationComponent style={{flex: 1}}/>
                         {this.state.hideNav == false ? (

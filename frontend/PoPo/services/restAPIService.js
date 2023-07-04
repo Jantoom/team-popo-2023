@@ -1,7 +1,8 @@
-import { getContentUriAsync } from "expo-file-system"
-
 export default class APIService {
-    static API_ADDRESS = "http://popo-1349446900.us-east-1.elb.amazonaws.com"
+    static LAN_ADDRESS = "http://10.194.139.183:6400"
+    static WEB_ADDRESS = "http://popo-1349446900.us-east-1.elb.amazonaws.com"
+
+    static API_ADDRESS = APIService.WEB_ADDRESS
     static ACCESS_TOKEN = ""
 
 
@@ -9,9 +10,6 @@ export default class APIService {
         formData,
         address = this.API_ADDRESS
     ) => { 
-        let h = new Headers()
-        h.append("access_token", APIService.ACCESS_TOKEN)
-
         response = await fetch(address, {
                 method: 'POST',
                 body: formData,
@@ -26,11 +24,11 @@ export default class APIService {
 
     static sendReport = async (imageURI, type, extraComments) => {
         let formData = new FormData();
-            formData.append("image", {
-                uri: imageURI,
-                type: "image/png",
-                name: "image.png",
-            })
+        formData.append("image", {
+            uri: imageURI,
+            type: "image/png",
+            name: "image.png",
+        })
         formData.append("type", type)
         formData.append("extra_comments", extraComments)
 
@@ -65,6 +63,8 @@ export default class APIService {
                 // Success Login
                 responseContent = await response.json()
                 accessToken = responseContent["access_token"]
+                console.log(accessToken)
+                console.log(responseContent)
                 APIService.ACCESS_TOKEN = accessToken
 
                 return {success:true, reason:""}

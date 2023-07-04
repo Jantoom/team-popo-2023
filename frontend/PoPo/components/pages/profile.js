@@ -22,22 +22,22 @@ export default class ProfilePage extends React.Component {
             <View style={{display:"flex", flex:1,}}>
                 <Image source={require("../../assets/background_image.png")} style={StyleService.main.backgroundImage}></Image>
 
-                <ScrollView>
+                <ScrollView style={{marginTop:20}}>
                 <View style={{backgroundColor:"#DEE9FF", margin:20, borderRadius:15, padding:20}}>
                     <Text style={{marginBottom:20, fontFamily:"B612"}}>ACCOUNT INFORMATION</Text>
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', marginBottom:10}}>
                         <Text style={{color:Colors.main.textColo, fontFamily:"B612"}}>Name: </Text>
-                        <TextInput backgroundColor={"red"} style={{marginRight:10, backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>Kevin</TextInput>
+                        <TextInput backgroundColor={"red"} style={{marginRight:10, backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>Kelly Luo</TextInput>
                         <TouchableHighlight style={{flex:1, backgroundColor:"#A3BFF4", borderRadius:5, height:"100%", alignItems:'center'}}><Text style={{flex:1, textAlignVertical:'center'}}>Edit Profile</Text></TouchableHighlight>
                     </View>
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', marginBottom:10}}>
                         <Text style={{color:Colors.main.textColor, fontFamily:"B612"}}>Email:  </Text>
-                        <TextInput backgroundColor={"red"} style={{backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>kevin@uqconnect.edu.au</TextInput>
+                        <TextInput backgroundColor={"red"} style={{backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>example@uqconnect.edu.au</TextInput>
                     </View>
 
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', marginBottom:10}}>
                         <Text style={{color:Colors.main.textColor, fontFamily:"B612"}}>Phone: </Text>
-                        <TextInput backgroundColor={"red"} style={{backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>13009467623</TextInput>
+                        <TextInput backgroundColor={"red"} style={{backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>13009461296 (call me)</TextInput>
                     </View>
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', alignContent:'center'}}>
                         <Text style={{color:Colors.main.textColor, fontSize:17, fontFamily:"B612"}}>POINTS: </Text>

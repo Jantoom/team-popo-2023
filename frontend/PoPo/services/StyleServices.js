@@ -92,7 +92,7 @@ export class StyleService {
         },
         cameraButton: {
           backgroundColor:'transparent',
-          width:"25%",
+          width:"10%",
           borderRadius:100,
           aspectRatio:1,
           alignSelf:'center',

@@ -70,7 +70,7 @@ export default class LoginPage extends React.Component {
                     </View>
                   </TouchableHighlight>
 
-                  <TouchableHighlight underlayColor={"#93acdb"} onPress={() => this.login()} style={{padding:10, flex:1, marginLeft:10, backgroundColor:"#A3BFF4", borderRadius:10}}>
+                  <TouchableHighlight underlayColor={"#93acdb"} onPress={() => this.login()} style={{padding:10, flex:1, marginLeft:10, backgroundColor:"#A3BFF4", borderRadius:10, marginBottom:20}}>
                     <View>
                       <Text style={{alignSelf:"center", color:"white"}}>Login</Text>
                     </View>

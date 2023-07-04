@@ -6,6 +6,7 @@ import NavigationService from '../../services/navigationService.js';
 import React from "react";
 import ReportPage from './report.js';
 import MainLayout from '../mainLayout.js';
+import DimensionService from '../../services/dimensionService.js';
 
 export default class CameraPage extends React.Component {
     /**
@@ -19,6 +20,8 @@ export default class CameraPage extends React.Component {
             page: "camera",
             permission: true,
             cameraType: CameraType.back,
+            mainButtonWidth: "25%",
+            littleButtonWidth: "10%"
         };
 
         this.toggleCameraType = () => {
@@ -43,6 +46,16 @@ export default class CameraPage extends React.Component {
         this.leaveCamera = (newPage) => {
             NavigationService.navigate(newPage)
         }
+
+        this.onOrientationChange = () => {
+            orient = DimensionService.getOrientation()
+
+            if (orient == "vertical") {
+                this.setState({mainButtonWidth: "25%", littleButtonWidth: "10%"})
+            } else {
+                this.setState({mainButtonWidth: "10%", littleButtonWidth: "5%"})
+            }
+        }
     }
 
     
@@ -59,10 +72,13 @@ export default class CameraPage extends React.Component {
         }
 
         MainLayout.mainLay.setState({padTop: false, navBorderRad: 0})
+
+        this.onOrientationChange()
+        DimensionService.addListener(this.onOrientationChange)
     }
 
     componentWillUnmount() {
-        MainLayout.mainLay.setState({padTop: true, navBorderRad: 30})
+        MainLayout.mainLay.setState({padTop: true, navBorderRad: 30})        
     }
 
     /**
@@ -74,24 +90,23 @@ export default class CameraPage extends React.Component {
                 <View style={{display:'flex', height:"100%", backgroundColor:'black', flex:1, justifyContent:'space-between'}}>
                     <View style={{flex:1}}>
                         <Camera ratio="16:9"
-                            style={{
-                                display:'flex',
-                                width:"100%",
-                                aspectRatio:0.5625,
-                                transform:[{scale: 1}, {translateY:0}],
-                                justifyContent:'flex-end',
-                                height:"100%",
-                                position:'absolute'
-                                
-                            }}
-                            type={this.state.cameraType} ref={(r) => {camera = r}}>
-                            <View style={{display:"flex", flexDirection:'row', alignContent:'center', alignItems:'center', justifyContent:'center'}}>
+                        style={{
+                            display:'flex',
+                            width:"100%",
+                            aspectRatio:0.5625,
+                            transform:[{scale: 1}, {translateY:0}],
+                            justifyContent:'flex-end',
+                            height:"100%",
+                            position:'absolute'
+                            
+                        }}
+                        type={this.state.cameraType} ref={(r) => {camera = r}}>
+                            <View style={{flexDirection:'row', alignContent:'center', alignItems:'center', justifyContent:'center', alignSelf:'center'}}>
                                 <TouchableOpacity style={{
-                                    width:"10%",
+                                    width:this.state.littleButtonWidth,
                                     borderRadius:100,
                                     aspectRatio:1,
                                     alignSelf:'center',
-                                    marginBottom:"5%",
                                     borderColor:"white",
                                     borderWidth:0,}} onPress={() => NavigationService.navigate("gallery")}>
                                         <Image source={require("../../assets/gallery.png")} style={{height:"90%",
@@ -100,15 +115,14 @@ export default class CameraPage extends React.Component {
                                         </Image>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={StyleService.main.cameraButton} onPress={this.takePhoto}>
+                                <TouchableOpacity style={[StyleService.main.cameraButton, {width:this.state.mainButtonWidth}]} onPress={this.takePhoto}>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
-                                    width:"10%",
+                                    width:this.state.littleButtonWidth,
                                     borderRadius:100,
                                     aspectRatio:1,
                                     alignSelf:'center',
-                                    marginBottom:"5%",
                                     borderColor:"white",
                                     borderWidth:0,}} onPress={this.toggleCameraType}>
                                         <Image source={require("../../assets/flipcamera.png")} style={{height:"90%",
