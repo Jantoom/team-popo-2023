@@ -23,7 +23,9 @@ export default class ReportPage extends React.Component {
             extraComments: "",
 
             isLoading: false,
-            errorOccured: false
+            errorOccured: false,
+
+            imageRatio: 0.5625
         }
 
         this.onDropdownChosen = (value) => {
@@ -53,6 +55,10 @@ export default class ReportPage extends React.Component {
         }
     }
 
+    componentDidMount() {
+        Image.getSize(MainLayout.mainLay.state.reportImage, (width, height) => {this.setState({imageRatio:width / height})})
+    }
+
     /**
      * Renders the component.
      */
@@ -64,18 +70,18 @@ export default class ReportPage extends React.Component {
                     
                     
                     <View style={{flexDirection:'row',display:'flex'}}>
-                        <Text style={{fontSize: 30, color: Colors.main.textColor, fontWeight:'bold', marginBottom:15}}>Submit A Report</Text>
+                        <Text style={{fontSize: 30, color: Colors.main.textColor, fontWeight:'bold', marginVertical:15}}>Submit A Report</Text>
                     </View>
 
                     <View>
-                        <Image style={{width:"100%", aspectRatio:0.9, resizeMode:'contain', overflow:'hidden', marginBottom:20}} source={{uri: MainLayout.mainLay.state.reportImage}}>
+                        <Image style={{marginBottom:20, width: "100%", aspectRatio:this.state.imageRatio, resizeMode:"contain", maxHeight:400, borderRadius:5, alignSelf:'center', borderWidth:1, borderColor:"black"}} source={{uri: MainLayout.mainLay.state.reportImage}}>
                         </Image>
                     </View>
                     
 
                     <Text style={{fontSize:20, color: Colors.main.textColor}}>Reason for your report?</Text>
                     <View style={{borderWidth:1, marginBottom:15}}>
-                        <Picker onValueChange={this.onDropdownChosen} selectedValue={this.state.dropdownValue} style={{color:Colors.main.textColor, backgroundColor: Colors.main.background}} dropdownIconColor={Colors.main.textColor}>
+                        <Picker onValueChange={this.onDropdownChosen} selectedValue={this.state.dropdownValue} style={{color:Colors.main.textColor, backgroundColor: Colors.main.background,}} dropdownIconColor={Colors.main.textColor}>
                             <Picker.Item label="Parking Violation" value="pv"/>
                             <Picker.Item label="Traffic Light Violation" value="tlv"/>
                             <Picker.Item label="Aggressive Driving" value="ad"/>
@@ -97,7 +103,7 @@ export default class ReportPage extends React.Component {
                 {this.state.isLoading == true ? (
                     <View style={{flex:1, width:"100%", height:"100%", position:'absolute', backgroundColor:'#000000aa', justifyContent:'center'}}>
                         <View style={{width:"100%", aspectRatio:1, borderRadius:30, alignSelf:'center'}}>
-                            <Spinner textContent={'Loading...'} textStyle={{color:"white"}} visible={true} style={{width:"10%", aspectRatio:1, backgroundColor:"white"}}></Spinner>
+                            <Spinner textContent={'Submitting...'} textStyle={{color:"white"}} visible={true} style={{width:"10%", aspectRatio:1, backgroundColor:"white"}}></Spinner>
                         </View>
                     </View>
                 ) : <></>}

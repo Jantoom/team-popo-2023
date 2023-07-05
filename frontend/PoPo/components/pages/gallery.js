@@ -1,11 +1,12 @@
 import FileService from '../../services/fileService.js'
 import { ScrollView, View, Image, Text, TouchableHighlight, Button } from 'react-native';
-import React, { useEffect } from "react";
+import React, { cloneElement, useEffect } from "react";
 import NavigationService from '../../services/navigationService.js';
 import { StyleService, Colors } from "../../services/StyleServices.js";
 import APIService from '../../services/restAPIService.js';
 import ReportPage from './report.js';
 import MainLayout from '../mainLayout.js';
+import DimensionService from '../../services/dimensionService.js';
 
 export default class GalleryPage extends React.Component {
     /**
@@ -17,6 +18,7 @@ export default class GalleryPage extends React.Component {
 
         this.state = {
             images: [],
+            galleryWidth: "31.333%"
         };
 
         this.updateImageLibrary = async () => {
@@ -30,14 +32,25 @@ export default class GalleryPage extends React.Component {
             this.updateImageLibrary()
         }
 
-        this.selectIamge = (imageURI) => {
+        this.selectImage = (imageURI) => {
             MainLayout.mainLay.setState({reportImage: imageURI})
             NavigationService.navigate("report")
+        }
+
+        this.onOrientationChange = () => {
+            orient = DimensionService.getOrientation()
+            if (orient == "vertical") {
+                this.setState({galleryWidth: "31.333%"})
+            } else {
+                this.setState({galleryWidth: "23%"})
+            }
         }
     }
 
     async componentDidMount() {
         this.updateImageLibrary()
+        this.onOrientationChange()
+        DimensionService.addListener(this.onOrientationChange)
     }
 
     /**
@@ -51,11 +64,11 @@ export default class GalleryPage extends React.Component {
                     <View style={{display: "flex", flexDirection:'row',flexWrap:'wrap'}}>
                         {this.state.images.map((item, index) => {
                             return (
-                                <TouchableHighlight key={item["fileURI"]} style={{width: "31.333%", height:150, margin: "1%"}} onPress={() => {this.selectIamge(item["fileURI"])}}>
+                                <TouchableHighlight key={item["fileURI"]} style={{width: this.state.galleryWidth, height:150, margin: "1%", borderRadius:10}} onPress={() => {this.selectImage(item["fileURI"])}}>
                                     <View style={{flex:1}}>
                                         <Image source={{uri: item["fileURI"]}} style={{flex:1, borderRadius:10}}></Image>
-                                        <TouchableHighlight onPress={() => this.deleteImage(item["fileURI"])} style={{position:'absolute', width:25, aspectRatio:1, alignSelf:"flex-end", margin:5}}>
-                                            <Image resizeMode='center' source={require("../../assets/bin.png")} style={{tintColor:"red",flex:1, width:"100%"}}></Image>
+                                        <TouchableHighlight onPress={() => this.deleteImage(item["fileURI"])} style={{position:'absolute', width:20, aspectRatio:1, alignSelf:"flex-end", right:5, top:5, backgroundColor:"white", justifyContent:'center', borderRadius:50}}>
+                                            <Text style={{color:"red", alignSelf:'center', fontWeight:'bold', verticalAlign:'middle'}}>X</Text>
                                         </TouchableHighlight>
                                     </View>
                                 </TouchableHighlight>
