@@ -2,7 +2,7 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token, jwt_required
 from core.util import parse_input, unknown_error
 from auth import api
-from auth.services import user_service
+from auth.services import auth_service
 from auth.schemas import SignupUserRequest, LoginUserRequest, LogoutUserRequest
 
 @api.route('/signup', methods=['POST'])
@@ -10,7 +10,7 @@ def signup_user():
     """Signs up a new user."""
     try:
         input = parse_input(SignupUserRequest())
-        user_service.signup_user(input)
+        auth_service.signup_user(input)
         return 'Successfully created user.', 201
     except Exception as e:    
         return unknown_error(e)
@@ -20,7 +20,7 @@ def login_user():
     """Logs in a user."""
     try:
         input = parse_input(LoginUserRequest())
-        user = user_service.login_user(input)
+        user = auth_service.login_user(input)
         if user is not None:
             access_token = create_access_token(identity=user.id)
             return jsonify(message='Successfully logged in user.', access_token=access_token), 200
@@ -35,7 +35,7 @@ def logout_user():
     """Logs out a user."""
     try:
         input = parse_input(LogoutUserRequest())
-        user_service.logout_user(input)
+        auth_service.logout_user(input)
         response = jsonify(message='Successfully logged out user')
         return response, 200
     except Exception as e:

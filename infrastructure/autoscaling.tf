@@ -1,7 +1,7 @@
 resource "aws_appautoscaling_target" "admin" { 
     max_capacity       = 10 
     min_capacity       = 1 
-    resource_id        = "service/dijo/admin" 
+    resource_id        = "service/popo/admin" 
     scalable_dimension = "ecs:service:DesiredCount" 
     service_namespace  = "ecs" 
 
@@ -11,31 +11,21 @@ resource "aws_appautoscaling_target" "admin" {
 resource "aws_appautoscaling_target" "auth" { 
     max_capacity       = 10 
     min_capacity       = 1 
-    resource_id        = "service/dijo/auth" 
+    resource_id        = "service/popo/auth" 
     scalable_dimension = "ecs:service:DesiredCount" 
     service_namespace  = "ecs" 
 
     depends_on = [aws_ecs_service.auth]
 } 
 
-resource "aws_appautoscaling_target" "marketplace" { 
+resource "aws_appautoscaling_target" "violations" { 
     max_capacity       = 10 
     min_capacity       = 1 
-    resource_id        = "service/dijo/marketplace" 
+    resource_id        = "service/popo/violations" 
     scalable_dimension = "ecs:service:DesiredCount" 
     service_namespace  = "ecs" 
 
-    depends_on = [aws_ecs_service.marketplace]
-} 
-
-resource "aws_appautoscaling_target" "notebook" { 
-    max_capacity       = 10 
-    min_capacity       = 1 
-    resource_id        = "service/dijo/notebook" 
-    scalable_dimension = "ecs:service:DesiredCount" 
-    service_namespace  = "ecs" 
-
-    depends_on = [aws_ecs_service.notebook]
+    depends_on = [aws_ecs_service.violations]
 } 
 
 resource "aws_appautoscaling_policy" "admin-cpu" { 
@@ -70,12 +60,12 @@ resource "aws_appautoscaling_policy" "auth-cpu" {
     } 
 }
 
-resource "aws_appautoscaling_policy" "marketplace-cpu" { 
-    name               = "marketplace_cpu" 
+resource "aws_appautoscaling_policy" "violations-cpu" { 
+    name               = "violations_cpu" 
     policy_type        = "TargetTrackingScaling" 
-    resource_id        = aws_appautoscaling_target.marketplace.resource_id 
-    scalable_dimension = aws_appautoscaling_target.marketplace.scalable_dimension 
-    service_namespace  = aws_appautoscaling_target.marketplace.service_namespace 
+    resource_id        = aws_appautoscaling_target.violations.resource_id 
+    scalable_dimension = aws_appautoscaling_target.violations.scalable_dimension 
+    service_namespace  = aws_appautoscaling_target.violations.service_namespace 
     
     target_tracking_scaling_policy_configuration { 
         predefined_metric_specification { 
@@ -84,20 +74,4 @@ resource "aws_appautoscaling_policy" "marketplace-cpu" {
 
         target_value = 10 
     } 
-}
-
-resource "aws_appautoscaling_policy" "notebook-cpu" { 
-    name               = "notebook_cpu" 
-    policy_type        = "TargetTrackingScaling" 
-    resource_id        = aws_appautoscaling_target.notebook.resource_id 
-    scalable_dimension = aws_appautoscaling_target.notebook.scalable_dimension 
-    service_namespace  = aws_appautoscaling_target.notebook.service_namespace 
-    
-    target_tracking_scaling_policy_configuration { 
-        predefined_metric_specification { 
-            predefined_metric_type = "ECSServiceAverageCPUUtilization" 
-        } 
-
-        target_value = 10 
-    } 
-}
+} 

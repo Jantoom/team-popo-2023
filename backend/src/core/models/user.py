@@ -9,7 +9,7 @@ class User(db.Model):
     username = db.Column(db.String(64), nullable=False, unique=True)
     password_hash = db.Column(db.String(120), nullable=False)
     points = db.Column(db.Integer, nullable=False, default=0)
-    #uploaded_violations = db.relationship('Violation', backref='uploader', lazy='dynamic')
+    uploaded_violations = db.relationship('Violation', backref='uploader', lazy='dynamic')
 
     def is_authenticated(self):
         return True

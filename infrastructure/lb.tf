@@ -1,49 +1,49 @@
 # ----- FRONTEND -----
 
-resource "aws_lb" "front" {
-  name               = "front"
-  internal           = false
-  load_balancer_type = "application"
-  subnets            = data.aws_subnets.private.ids
-  security_groups    = [aws_security_group.dijo.id]
-}
+# resource "aws_lb" "front" {
+#   name               = "front"
+#   internal           = false
+#   load_balancer_type = "application"
+#   subnets            = data.aws_subnets.private.ids
+#   security_groups    = [aws_security_group.popo.id]
+# }
 
-resource "aws_lb_target_group" "front_target" {
-  name        = "front-target"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = aws_security_group.front.vpc_id
-  target_type = "ip"
+# resource "aws_lb_target_group" "front_target" {
+#   name        = "front-target"
+#   port        = 80
+#   protocol    = "HTTP"
+#   vpc_id      = aws_security_group.front.vpc_id
+#   target_type = "ip"
 
-  health_check {
-    matcher = "200,301,302"
-    path    = "/"
-  }
-}
+#   health_check {
+#     matcher = "200,301,302"
+#     path    = "/"
+#   }
+# }
 
-resource "aws_lb_listener" "front_target" {
-  load_balancer_arn = aws_lb.front.arn
-  port              = "80"
-  protocol          = "HTTP"
+# resource "aws_lb_listener" "front_target" {
+#   load_balancer_arn = aws_lb.front.arn
+#   port              = "80"
+#   protocol          = "HTTP"
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.front_target.arn
-  }
-}
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.front_target.arn
+#   }
+# }
 
 # ----- BACKEND -----
 
-resource "aws_lb" "dijo" {
-  name               = "dijo"
+resource "aws_lb" "popo" {
+  name               = "popo"
   internal           = false
   load_balancer_type = "application"
   subnets            = data.aws_subnets.private.ids
-  security_groups    = [aws_security_group.dijo.id]
+  security_groups    = [aws_security_group.popo.id]
 }
 
-resource "aws_lb_listener" "dijo" {
-  load_balancer_arn = aws_lb.dijo.arn
+resource "aws_lb_listener" "popo" {
+  load_balancer_arn = aws_lb.popo.arn
   port              = "80"
   protocol          = "HTTP"
 
@@ -59,7 +59,7 @@ resource "aws_lb_listener" "dijo" {
 }
 
 resource "aws_lb_listener_rule" "admin_forward" {
-  listener_arn = aws_lb_listener.dijo.arn
+  listener_arn = aws_lb_listener.popo.arn
   priority     = 100
 
   action {
@@ -75,7 +75,7 @@ resource "aws_lb_listener_rule" "admin_forward" {
 }
 
 resource "aws_lb_listener_rule" "auth_forward" {
-  listener_arn = aws_lb_listener.dijo.arn
+  listener_arn = aws_lb_listener.popo.arn
   priority     = 101
 
   action {
@@ -85,39 +85,23 @@ resource "aws_lb_listener_rule" "auth_forward" {
 
   condition {
     path_pattern {
-      values = ["*/users*"]
+      values = ["*/auth*"]
     }
   }
 }
 
-resource "aws_lb_listener_rule" "marketplace_forward" {
-  listener_arn = aws_lb_listener.dijo.arn
+resource "aws_lb_listener_rule" "violations_forward" {
+  listener_arn = aws_lb_listener.popo.arn
   priority     = 102
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.marketplace.arn
+    target_group_arn = aws_lb_target_group.violations.arn
   }
 
   condition {
     path_pattern {
-      values = ["*/assets*"]
-    }
-  }
-}
-
-resource "aws_lb_listener_rule" "notebook_forward" {
-  listener_arn = aws_lb_listener.dijo.arn
-  priority     = 103
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.notebook.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["*/notebooks*"]
+      values = ["*/violations*"]
     }
   }
 }
@@ -148,7 +132,7 @@ resource "aws_lb_target_group" "auth" {
   target_type = "ip"
 
   health_check {
-    path                = "/api/v1/users/health"
+    path                = "/api/v1/auth/health"
     port                = "6400"
     protocol            = "HTTP"
     healthy_threshold   = 2
@@ -158,33 +142,15 @@ resource "aws_lb_target_group" "auth" {
   }
 }
 
-resource "aws_lb_target_group" "marketplace" {
-  name        = "marketplace"
+resource "aws_lb_target_group" "violations" {
+  name        = "violations"
   port        = 6400
   protocol    = "HTTP"
-  vpc_id      = aws_security_group.marketplace.vpc_id
+  vpc_id      = aws_security_group.violations.vpc_id
   target_type = "ip"
 
   health_check {
-    path                = "/api/v1/assets/health"
-    port                = "6400"
-    protocol            = "HTTP"
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
-    interval            = 10
-  }
-}
-
-resource "aws_lb_target_group" "notebook" {
-  name        = "notebook"
-  port        = 6400
-  protocol    = "HTTP"
-  vpc_id      = aws_security_group.notebook.vpc_id
-  target_type = "ip"
-
-  health_check {
-    path                = "/api/v1/notebooks/health"
+    path                = "/api/v1/violations/health"
     port                = "6400"
     protocol            = "HTTP"
     healthy_threshold   = 2
@@ -196,9 +162,9 @@ resource "aws_lb_target_group" "notebook" {
 
 # ----- SECURITY GROUPS -----
 
-resource "aws_security_group" "dijo" {
-  name        = "dijo"
-  description = "Dijo Security Group"
+resource "aws_security_group" "popo" {
+  name        = "popo"
+  description = "Popo Security Group"
 
   ingress {
     from_port   = 80

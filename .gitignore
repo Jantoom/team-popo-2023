@@ -356,5 +356,6 @@ terraform.rc
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,react,database,git,flask,terraform
 
-# AWS Credentials
+# Extra
 credentials
+update_aws_repositories.sh

@@ -7,7 +7,7 @@ def create_app(config_overrides=None):
     app = create_default_app(config_overrides)
     
     # Enable the endpoints
-    from violation.routes import violation_list_routes, violation_routes
+    from violations.routes import violation_list_routes, violation_routes
     app.register_blueprint(api)
 
     return app

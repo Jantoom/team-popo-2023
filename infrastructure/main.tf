@@ -17,7 +17,7 @@ provider "aws" {
   default_tags {
     tags = {
       Course     = "CSSE6400"
-      Name       = "Dijo"
+      Name       = "Popo"
       Automation = "Terraform"
     }
   }
@@ -37,10 +37,10 @@ locals {
     secret_key = "abc123"
 }
 
-resource "local_file" "url" {
-  content  = "VITE_URI=http://${aws_lb.dijo.dns_name}"
-  filename = "../frontend/.env"
-}
+# resource "local_file" "url" {
+#   content  = "VITE_URI=http://${aws_lb.popo.dns_name}"
+#   filename = "../frontend/.env"
+# }
 
 data "aws_ecr_authorization_token" "ecr_token" {}
 
@@ -61,10 +61,14 @@ data "aws_subnets" "private" {
   }
 }
 
-output "load_balancer_back_dns" { 
-   value = "http://${aws_lb.dijo.dns_name}/api/v1" 
+output "database_uri" {
+  value = "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}"
 }
 
-output "load_balancer_front_dns" {
-  value = "http://${aws_lb.front.dns_name}/"
+output "load_balancer_back_dns" { 
+   value = "http://${aws_lb.popo.dns_name}/api/v1" 
 }
+
+# output "load_balancer_front_dns" {
+#   value = "http://${aws_lb.front.dns_name}/"
+# }

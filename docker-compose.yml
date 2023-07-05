@@ -13,7 +13,7 @@ services:
   admin:
     build:
       context: .
-      dockerfile: backend/src/admin/Dockerfile.dev
+      dockerfile: backend/src/admin/Dockerfile
     restart: always
     env_file:
       - docker-compose.env
@@ -25,7 +25,7 @@ services:
   auth:
     build:
       context: .
-      dockerfile: backend/src/auth/Dockerfile.dev
+      dockerfile: backend/src/auth/Dockerfile
     restart: always
     env_file:
       - docker-compose.env
@@ -34,10 +34,10 @@ services:
     depends_on:
       - database
 
-  violation:
+  violations:
     build:
       context: .
-      dockerfile: backend/src/violation/Dockerfile.dev
+      dockerfile: backend/src/violations/Dockerfile
     restart: always
     env_file:
       - docker-compose.env
@@ -49,19 +49,19 @@ services:
   reverse-proxy:
     build:
       context: .
-      dockerfile: backend/nginx/Dockerfile.dev
+      dockerfile: backend/nginx/Dockerfile
     restart: always
     ports:
       - 6400:6400
     depends_on:
       - admin
       - auth
-      - violation
+      - violations
 
   # frontend:
   #   build:
   #     context: ./frontend
-  #     dockerfile: Dockerfile.dev
+  #     dockerfile: Dockerfile
   #   restart: always
   #   env_file:
   #     - docker-compose.env

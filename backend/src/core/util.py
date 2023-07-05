@@ -15,10 +15,10 @@ def load_user(user_id) -> User:
 
 def create_default_app(config_overrides=None) -> Flask:
     app = Flask(__name__)
-    #CORS(app)
+    CORS(app)
 
     app.config["JWT_SECRET_KEY"] = os.getenv('SECRET_KEY', secrets.token_urlsafe())
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=5)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=24)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///db.sqlite')
 
     if config_overrides:

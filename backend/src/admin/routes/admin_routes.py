@@ -20,7 +20,7 @@ def get_user_list():
 
 @api.route('/<string:violation_id>', methods=['DELETE'])
 @jwt_required()
-def delete_violation(asset_id):
+def delete_violation(violation_id):
     """Deletes all references to an violation."""
     try:
         input = parse_input(DeleteViolationRequest())

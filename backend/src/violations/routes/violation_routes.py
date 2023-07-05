@@ -1,9 +1,9 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from core.util import parse_input, unknown_error
-from violation import api
-from violation.schemas import GetViolationRequest, DeleteViolationRequest
-from violation.services import violation_service
+from violations import api
+from violations.schemas import GetViolationRequest, DeleteViolationRequest
+from violations.services import violations_service
 
 @api.route('/<string:violation_id>', methods=['GET'])
 @jwt_required()
@@ -11,7 +11,7 @@ def get_violation(violation_id):
     """Get details for a particular violation."""
     try:
         input = parse_input(GetViolationRequest())
-        violation = violation_service.get_violation(input)
+        violation = violations_service.get_violation(input)
         if violation:
             return jsonify(violation.to_dict()), 200
         else:
@@ -25,7 +25,7 @@ def delete_violation(violation_id):
     """Deletes an violation associated with the session account."""
     try:
         input = parse_input(DeleteViolationRequest())
-        userViolation = violation_service.delete_violation(input)
+        userViolation = violations_service.delete_violation(input)
         if userViolation is not None:
             return 'Successfully deleted violation.', 201
         else:

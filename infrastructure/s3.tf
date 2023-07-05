@@ -1,12 +1,12 @@
 variable "bucket_name" {
-  default = "assets-dijo-s3"
+  default = "team-popo-violation-images"
 }
 
-resource "aws_s3_bucket" "assets" {
+resource "aws_s3_bucket" "violation-images" {
   bucket = var.bucket_name
 }
 
-resource "aws_s3_bucket_cors_configuration" "assets" {
+resource "aws_s3_bucket_cors_configuration" "violation-images" {
   bucket = var.bucket_name
   cors_rule {
     allowed_headers = ["*"]
