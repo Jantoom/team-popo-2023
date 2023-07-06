@@ -1,5 +1,5 @@
 import uuid
-from core import db
+from src.core import db
 
 class User(db.Model):
     __tablename__ = 'users'

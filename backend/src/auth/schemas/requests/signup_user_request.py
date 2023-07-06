@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, validate
-from core.models import User
+from src.core.models import User
 
 class SignupUserRequest(Schema):
     email = fields.Email(required=True)

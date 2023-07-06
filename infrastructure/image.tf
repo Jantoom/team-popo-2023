@@ -1,28 +1,10 @@
-# ----- FRONTEND -----
+resource "aws_ecr_repository" "monolithic" {
+  name = "monolithic"
 
-# resource "aws_ecr_repository" "popo_front" {
-#   name = "popo-front"
-
-#   image_scanning_configuration {
-#     scan_on_push = true
-#   }
-# }
-
-# resource "docker_image" "popo_fr" {
-#   name = "${aws_ecr_repository.popo_front.repository_url}:latest"
-#   depends_on = [ local_file.url ]
-
-#   build {
-#     context    = "../frontend"
-#     dockerfile = "Dockerfile"
-#   }
-# }
-
-# resource "docker_registry_image" "popo_fr" {
-#   name = docker_image.popo_fr.name
-# }
-
-# ----- BACKEND -----
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
 
 resource "aws_ecr_repository" "admin" {
   name = "admin"
@@ -45,6 +27,15 @@ resource "aws_ecr_repository" "violations" {
 
   image_scanning_configuration {
     scan_on_push = true
+  }
+}
+
+resource "docker_image" "monolithic" {
+  name = "${aws_ecr_repository.monolithic.repository_url}:latest"
+  
+  build {
+    context    = ".."
+    dockerfile = "backend/src/monolithic/Dockerfile"
   }
 }
 
@@ -73,6 +64,10 @@ resource "docker_image" "violations" {
     context    = ".."
     dockerfile = "backend/src/violations/Dockerfile"
   }
+}
+
+resource "docker_registry_image" "monolithic" {
+  name = docker_image.monolithic.name
 }
 
 resource "docker_registry_image" "admin" {

@@ -1,6 +1,6 @@
 from typing import List
-from core import db
-from core.models import User, Violation
+from src.core import db
+from src.core.models import User, Violation
 
 def get_users(data: dict) -> List[User]:
     users = db.session.scalars(db.

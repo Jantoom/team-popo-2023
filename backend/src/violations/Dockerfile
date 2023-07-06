@@ -14,9 +14,9 @@ RUN pipenv install --system --deploy
 # Copying our AWS credentials
 COPY credentials /root/.aws/credentials
 # Copying our application into the container
-COPY backend/src/core core
-COPY backend/src/violations violations
+COPY backend/src/core src/core
+COPY backend/src/violations src/violations
 # Running our application
-RUN chmod +x violations/docker-entrypoint
-ENTRYPOINT ["violations/docker-entrypoint"]
-CMD ["serve"]
+RUN chmod +x src/core/docker-entrypoint
+ENTRYPOINT ["src/core/docker-entrypoint"]
+CMD ["serve", "violations"]

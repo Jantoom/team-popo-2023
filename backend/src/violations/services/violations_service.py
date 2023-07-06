@@ -1,8 +1,8 @@
 import boto3, random, string, io, os
 from typing import List, Tuple
 from botocore.exceptions import ClientError
-from core import db
-from core.models import Violation
+from src.core import db
+from src.core.models import Violation
 
 BUCKET_NAME = os.getenv('S3_BUCKET', None) # Set your S3 bucket name in code/docker-compose.env
 S3 = boto3.client('s3')

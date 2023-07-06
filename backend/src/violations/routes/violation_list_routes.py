@@ -1,10 +1,10 @@
 from botocore.exceptions import ClientError
 from flask import jsonify
 from flask_jwt_extended import jwt_required
-from core.util import parse_input, unknown_error
-from violations import api
-from violations.schemas import GetViolationListRequest, UploadViolationRequest
-from violations.services import violations_service
+from src.core.util import parse_input, unknown_error
+from src.violations import api
+from src.violations.schemas import GetViolationListRequest, UploadViolationRequest
+from src.violations.services import violations_service
 
 @api.route('', methods=['GET'])
 @jwt_required()

@@ -1,3 +1,13 @@
+resource "aws_appautoscaling_target" "monolithic" { 
+    max_capacity       = 10 
+    min_capacity       = 1 
+    resource_id        = "service/popo/monolithic" 
+    scalable_dimension = "ecs:service:DesiredCount" 
+    service_namespace  = "ecs" 
+
+    depends_on = [aws_ecs_service.monolithic]
+} 
+
 resource "aws_appautoscaling_target" "admin" { 
     max_capacity       = 10 
     min_capacity       = 1 
@@ -27,6 +37,22 @@ resource "aws_appautoscaling_target" "violations" {
 
     depends_on = [aws_ecs_service.violations]
 } 
+
+resource "aws_appautoscaling_policy" "monolithic-cpu" { 
+    name               = "monolithic_cpu" 
+    policy_type        = "TargetTrackingScaling" 
+    resource_id        = aws_appautoscaling_target.monolithic.resource_id 
+    scalable_dimension = aws_appautoscaling_target.monolithic.scalable_dimension 
+    service_namespace  = aws_appautoscaling_target.monolithic.service_namespace 
+    
+    target_tracking_scaling_policy_configuration { 
+        predefined_metric_specification { 
+            predefined_metric_type = "ECSServiceAverageCPUUtilization" 
+        } 
+
+        target_value = 10 
+    } 
+}
 
 resource "aws_appautoscaling_policy" "admin-cpu" { 
     name               = "admin_cpu" 

@@ -1,39 +1,3 @@
-# ----- FRONTEND -----
-
-# resource "aws_lb" "front" {
-#   name               = "front"
-#   internal           = false
-#   load_balancer_type = "application"
-#   subnets            = data.aws_subnets.private.ids
-#   security_groups    = [aws_security_group.popo.id]
-# }
-
-# resource "aws_lb_target_group" "front_target" {
-#   name        = "front-target"
-#   port        = 80
-#   protocol    = "HTTP"
-#   vpc_id      = aws_security_group.front.vpc_id
-#   target_type = "ip"
-
-#   health_check {
-#     matcher = "200,301,302"
-#     path    = "/"
-#   }
-# }
-
-# resource "aws_lb_listener" "front_target" {
-#   load_balancer_arn = aws_lb.front.arn
-#   port              = "80"
-#   protocol          = "HTTP"
-
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.front_target.arn
-#   }
-# }
-
-# ----- BACKEND -----
-
 resource "aws_lb" "popo" {
   name               = "popo"
   internal           = false
@@ -54,6 +18,23 @@ resource "aws_lb_listener" "popo" {
       content_type = "text/plain"
       message_body = "Endpoint not registered LOL."
       status_code = 404
+    }
+  }
+}
+
+# Disable if not monolithic deployment !!!
+resource "aws_lb_listener_rule" "monolithic_forward" {
+  listener_arn = aws_lb_listener.popo.arn
+  priority     = 99
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.monolithic.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["*/*"]
     }
   }
 }
@@ -103,6 +84,24 @@ resource "aws_lb_listener_rule" "violations_forward" {
     path_pattern {
       values = ["*/violations*"]
     }
+  }
+}
+
+resource "aws_lb_target_group" "monolithic" {
+  name        = "monolithic"
+  port        = 6400
+  protocol    = "HTTP"
+  vpc_id      = aws_security_group.monolithic.vpc_id
+  target_type = "ip"
+
+  health_check {
+    path                = "/api/v1/admin/health"
+    port                = "6400"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 10
   }
 }
 
@@ -159,8 +158,6 @@ resource "aws_lb_target_group" "violations" {
     interval            = 10
   }
 }
-
-# ----- SECURITY GROUPS -----
 
 resource "aws_security_group" "popo" {
   name        = "popo"

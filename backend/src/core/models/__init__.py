@@ -1,2 +1,2 @@
-from core.models.user import User
-from core.models.violation import Violation
+from src.core.models.user import User
+from src.core.models.violation import Violation

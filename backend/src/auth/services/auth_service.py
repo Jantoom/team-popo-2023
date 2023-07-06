@@ -1,7 +1,7 @@
 from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
-from core import db
-from core.models import User
+from src.core import db
+from src.core.models import User
 
 def signup_user(data: dict) -> User:
         user = User(

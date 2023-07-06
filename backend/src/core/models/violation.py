@@ -1,5 +1,5 @@
 import uuid, enum, datetime
-from core import db
+from src.core import db
 
 class TypeEnum(enum.Enum):
     NONE = 'NONE'

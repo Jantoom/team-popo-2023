@@ -1,4 +1,4 @@
-from auth import api
+from src.auth import api
 
 @api.route('/health', methods=['GET'])
 def health_check():

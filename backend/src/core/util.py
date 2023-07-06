@@ -3,8 +3,8 @@ from base64 import b64encode
 from flask import Flask, request
 from flask_cors import CORS
 from marshmallow import Schema
-from core import db, jwt_manager, ma
-from core.models import User
+from src.core import db, jwt_manager, ma
+from src.core.models import User
 
 @jwt_manager.user_identity_loader
 def load_user(user_id) -> User:
@@ -25,7 +25,7 @@ def create_default_app(config_overrides=None) -> Flask:
         app.config.update(config_overrides)
 
     # Load the models
-    from core.models import User, Violation
+    from src.core.models import User, Violation
     db.init_app(app)
     ma.init_app(app)
     jwt_manager.init_app(app)

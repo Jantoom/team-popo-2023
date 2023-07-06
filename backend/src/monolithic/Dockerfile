@@ -1,6 +1,5 @@
 FROM ubuntu:latest
 # Installing dependencies and cleaning up
-
 RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update && \
         apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false install -y python3 python3-pip postgresql-client libpq-dev libcurl4-openssl-dev libssl-dev && \
         apt-get clean && \
@@ -15,9 +14,8 @@ RUN pipenv install --system --deploy
 # Copying our AWS credentials
 COPY credentials /root/.aws/credentials
 # Copying our application into the container
-COPY backend/src/core src/core
-COPY backend/src/auth src/auth
+COPY backend/src src
 # Running our application
 RUN chmod +x src/core/docker-entrypoint
 ENTRYPOINT ["src/core/docker-entrypoint"]
-CMD ["serve", "auth"]
+CMD ["serve", "monolithic"]

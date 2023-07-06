@@ -3,15 +3,16 @@
 set -e
 
 # If there is more than one argument then return the help
-if [ $# -gt 1 ]; then
-    echo "Usage: docker-entrypoint [COMMAND]"
+if [ $# -gt 2 ]; then
+    echo "Usage: docker-entrypoint [COMMAND] [MAIN DIR]"
     echo "  COMMAND: The command to run. If not specified, the default command is used."
+    echo "  MAIN DIR: The directory in which __init__.py is located (the main entrypoint)."
     exit 1
 fi
 
 # If the first argument is serve then run the default command
 if [ $# -eq 0 ] || [ "$1" = "serve" ]; then
-    python3 /app/auth/wait_for_db.py
+    python3 /app/src/core/wait_for_db.py
 
-    exec /usr/local/bin/gunicorn --bind 0.0.0.0:6400 'auth:create_app()'
+    exec /usr/local/bin/gunicorn --bind 0.0.0.0:6400 "src.$2:create_app()"
 fi

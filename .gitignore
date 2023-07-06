@@ -358,4 +358,4 @@ terraform.rc
 
 # Extra
 credentials
-update_aws_repositories.sh
+# update_aws_repositories.sh # Whatever if sensitive, who cares

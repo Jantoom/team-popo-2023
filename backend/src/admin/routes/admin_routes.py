@@ -1,9 +1,9 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required
-from core.util import parse_input, unknown_error
-from admin import api
-from admin.schemas import GetUserListRequest, DeleteViolationRequest
-from admin.services import admin_service
+from src.core.util import parse_input, unknown_error
+from src.admin import api
+from src.admin.schemas import GetUserListRequest, DeleteViolationRequest
+from src.admin.services import admin_service
 
 @api.route('/users', methods=['GET'])
 @jwt_required()
