@@ -355,3 +355,7 @@ terraform.rc
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,react,database,git,flask,terraform
+
+# Extra
+credentials
+# update_aws_repositories.sh # Whatever if sensitive, who cares

@@ -1,11 +1,9 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required
-from src.core.services import violation_service
-from src.core.util import unknown_error
-from src.core.schemas import parse_input
-from src.core.services import user_service
+from src.core.util import parse_input, unknown_error
 from src.admin import api
 from src.admin.schemas import GetUserListRequest, DeleteViolationRequest
+from src.admin.services import admin_service
 
 @api.route('/users', methods=['GET'])
 @jwt_required()
@@ -14,7 +12,7 @@ def get_user_list():
     try:
         input = parse_input(GetUserListRequest())
         result = []
-        for user in user_service.get_users(input):
+        for user in admin_service.get_users(input):
             result.append(user.to_dict())
         return jsonify(result), 200
     except Exception as e:
@@ -22,11 +20,11 @@ def get_user_list():
 
 @api.route('/<string:violation_id>', methods=['DELETE'])
 @jwt_required()
-def delete_violation(asset_id):
+def delete_violation(violation_id):
     """Deletes all references to an violation."""
     try:
         input = parse_input(DeleteViolationRequest())
-        violation = violation_service.delete_violation(input)
+        violation = admin_service.delete_violation(input)
         if violation is not None:
             return 'Successfully deleted violation.', 201
         else:
