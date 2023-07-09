@@ -201,7 +201,6 @@ def checkLineIntersection(line, polyPositionList):
     lineI1 = shapely.geometry.LineString(line)
 
     doesIntersect = lineI1.intersects(car_poly)
-    print('Parked Illegally: ', doesIntersect)
     return doesIntersect
 
 def start(file, showImage=False):
@@ -209,6 +208,9 @@ def start(file, showImage=False):
     aiData = getAiData(file)
     # Create PolyShapes from points
     polyShapes = createPolyShapes(aiData)     
+
+    # An array of booleans. Each boolean repesents if a parking line intersected with a car. Checks each line with each car.
+    results = []
 
     for shape in getPolyShapeFromClass("lines", polyShapes):
         # Create Vectors from Point to Point in Polygon
@@ -223,9 +225,16 @@ def start(file, showImage=False):
 
         
         for carShape in getPolyShapeFromClass("car", polyShapes):
-            checkLineIntersection(averageLine, carShape.getPositionList())
+            doesIntersect = checkLineIntersection(averageLine, carShape.getPositionList())
+            results.append(doesIntersect)
     
     if showImage:
         drawImage(polyShapes, averageLine[0], averageLine[1])
+    
+    # Returns true if any line intersects with any car
+    for result in results:
+        if result:
+            return result
+    return False
 
-start("data.txt", showImage=True)
+print(start("data.txt", showImage=False))
