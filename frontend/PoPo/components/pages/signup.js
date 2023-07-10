@@ -15,9 +15,9 @@ export default class SignUpPage extends React.Component {
         super(props);
 
         this.state = {
-          username: "sementha",
-          password: "123",
-          email: "sementha@gmail.com",
+          username: "",
+          password: "",
+          email: "",
           isLoading: false,
           errorOccured: false,
           errorText: ""

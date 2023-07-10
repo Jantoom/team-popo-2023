@@ -1,11 +1,11 @@
 
-import { ScrollView, View, Image, Text, TouchableHighlight, Button } from 'react-native';
-import React, { cloneElement } from "react";
-import { ImageBackground } from 'react-native';
+import { ScrollView, View, Image, Text, TouchableHighlight, ActivityIndicator } from 'react-native';
+import React from "react";
 import { StyleService, Colors } from '../../services/StyleServices';
-import { TextInput } from 'react-native';
 import NavigationService from '../../services/navigationService';
 import DimensionService from '../../services/dimensionService';
+import MainLayout from '../mainLayout';
+import APIService from '../../services/restAPIService';
 
 export default class HomePage extends React.Component {
     /**
@@ -16,7 +16,9 @@ export default class HomePage extends React.Component {
         super(props);
 
         this.state = {
-            buttonsWidth: "46%"
+            buttonsWidth: "46%",
+            reportHistoryLoaded: false,
+            reportHistory: [],
         }
 
         this.onOrientationChange = () => {
@@ -33,7 +35,12 @@ export default class HomePage extends React.Component {
     componentDidMount() {
         this.onOrientationChange()
         DimensionService.addListener(this.onOrientationChange)
+        APIService.getReportHistory().then((res) => {
 
+            if (res["success"] === true) {
+                this.setState({reportHistoryLoaded: true, reportHistory: res["reportHistory"]["violations"]})
+            }
+        })
     }
 
     /**
@@ -78,6 +85,43 @@ export default class HomePage extends React.Component {
                             </TouchableHighlight>
                         </View>             
                     </View>
+                    <View style={{backgroundColor:"#DEE9FF", margin:20, borderRadius:5, padding:20, paddingBottom:10}}>
+                        <Text style={{marginBottom:5, fontFamily:"B612"}}>PENDING REPORTS</Text>
+                    {
+                        this.state.reportHistoryLoaded === true  ? (
+                        <>
+                        {
+                            this.state.reportHistory.size > 0 ?
+                            this.state.reportHistory.map((violation) => {
+                                return (
+                                    <View key={violation.id} style={{padding:10, backgroundColor: "white", marginBottom:10, borderRadius:10}}>
+                                        <View style={{display:"flex", flexDirection:"row"}}>
+                                            {violation.uri === "" ? (
+                                                <Image source={require("../../assets/gallery.png")} style={{width:"25%", aspectRatio:1, borderRadius:5, marginRight:5, alignSelf:"center"}}></Image>
+                                            ) : (
+                                                <Image source={{uri: violation.uri}} style={{width:"25%", height:"95%", borderRadius:5, marginRight:5}}></Image>
+                                            )}
+                                            
+                                            <View style={{flex:1}}>
+                                                <Text style={{fontFamily:"B612", fontSize:15, fontWeight:'bold'}}>{violation.created_at}</Text>                                                
+                                                <Text style={{fontFamily:"B612", fontSize:13}}>Status: {violation["status"]}</Text>
+
+                                                {violation["extra_comments"] !== "" ? (
+                                                    <Text numberOfLines={2} style={{fontFamily:"B612", fontSize:13}}>{violation["extra_comments"]}</Text>
+                                                ) : <></>}
+                                                <Text></Text>
+                                            </View>
+                                        </View>
+                                        
+                                    </View>
+                                )
+                            }) : (<Text style={{alignSelf:'center', marginVertical:10, fontSize:13}}>No Reports</Text>)
+                        }</>
+                    
+                        ) : (<ActivityIndicator size="large" />)
+                    }
+                    </View>
+                    
                 </ScrollView>
             </View>
         );

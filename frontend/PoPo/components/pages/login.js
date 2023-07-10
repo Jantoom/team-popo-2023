@@ -15,8 +15,8 @@ export default class LoginPage extends React.Component {
         super(props);
 
         this.state = {
-          username: "sementha",
-          password: "123",
+          username: "B",
+          password: "B",
           isLoading: false,
           errorOccured: false,
           errorText: ""
@@ -70,7 +70,7 @@ export default class LoginPage extends React.Component {
                     </View>
                   </TouchableHighlight>
 
-                  <TouchableHighlight underlayColor={"#93acdb"} onPress={() => this.login()} style={{padding:10, flex:1, marginLeft:10, backgroundColor:"#A3BFF4", borderRadius:10, marginBottom:20}}>
+                  <TouchableHighlight underlayColor={"#93acdb"} onPress={() => this.login()} style={{padding:10, flex:1, marginLeft:10, backgroundColor:"#6494e9", borderRadius:10, marginBottom:20}}>
                     <View>
                       <Text style={{alignSelf:"center", color:"white"}}>Login</Text>
                     </View>

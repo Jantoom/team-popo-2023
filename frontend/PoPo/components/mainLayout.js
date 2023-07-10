@@ -23,6 +23,8 @@ export default class MainLayout extends React.Component {
             hideNav: false,
             navBorderRad: 30,
             debug: 1,
+
+            reportHistory: []
         }
     }
 
