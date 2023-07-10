@@ -1,6 +1,6 @@
 import traceback, os, secrets, datetime
 from base64 import b64encode
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from marshmallow import Schema
 from src.core import db, jwt_manager, ma
@@ -17,7 +17,7 @@ def create_default_app(config_overrides=None) -> Flask:
     app = Flask(__name__)
     CORS(app)
 
-    app.config["JWT_SECRET_KEY"] = os.getenv('SECRET_KEY', secrets.token_urlsafe())
+    app.config["JWT_SECRET_KEY"] = os.getenv('SECRET_KEY', 'Drmhze6EPcv0fN_81Bj-nA') # secrets.token_urlsafe()
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=24)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///db.sqlite')
 
@@ -36,8 +36,8 @@ def create_default_app(config_overrides=None) -> Flask:
         db.session.commit()
 
     return app
-
-def parse_input(schema: Schema) -> dict:
+    
+def parameters() -> dict:
     params = dict()
     # Route
     params.update(request.view_args)
@@ -50,7 +50,7 @@ def parse_input(schema: Schema) -> dict:
     # File
     params.update({key: b64encode(value.read()).decode('utf-8') for key, value in request.files.items()})
 
-    return schema.load(params)
+    return params
 
 def unknown_error(e):
     return 'An unknown error occurred trying to process the request.' + \

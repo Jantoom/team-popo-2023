@@ -1,17 +1,21 @@
 from flask import jsonify
-from flask_jwt_extended import create_access_token, jwt_required
-from src.core.util import parse_input, unknown_error
+from flask_jwt_extended import jwt_required
+from src.core.util import parameters, unknown_error
 from src.auth import api
 from src.auth.services import auth_service
-from src.auth.schemas import SignupUserRequest, LoginUserRequest, LogoutUserRequest
+from src.auth.schemas import SignupUserRequest, SignupUserResponse, \
+    LoginUserRequest, LoginUserResponse, LogoutUserRequest, LogoutUserResponse
 
 @api.route('/signup', methods=['POST'])
 def signup_user():
     """Signs up a new user."""
     try:
-        input = parse_input(SignupUserRequest())
-        auth_service.signup_user(input)
-        return 'Successfully created user.', 201
+        input = SignupUserRequest().load(parameters())
+        user = auth_service.signup_user(input)
+        return jsonify(
+            message='Successfully created user.',
+            user=SignupUserResponse().dump(user)
+        ), 201
     except Exception as e:    
         return unknown_error(e)
 
@@ -19,13 +23,13 @@ def signup_user():
 def login_user():
     """Logs in a user."""
     try:
-        input = parse_input(LoginUserRequest())
+        input = LoginUserRequest().load(parameters())
         user = auth_service.login_user(input)
-        if user is not None:
-            access_token = create_access_token(identity=user.id)
-            return jsonify(message='Successfully logged in user.', access_token=access_token), 200
-        else:
-            return 'Username or password is invalid', 404
+        return jsonify(
+            message='Successfully logged in user.',
+            user=LoginUserResponse().dump(user)
+        ), 200
+        return 'Username or password is invalid', 404
     except Exception as e:
         return unknown_error(e)
 
@@ -34,9 +38,11 @@ def login_user():
 def logout_user():
     """Logs out a user."""
     try:
-        input = parse_input(LogoutUserRequest())
-        auth_service.logout_user(input)
-        response = jsonify(message='Successfully logged out user')
-        return response, 200
+        input = LogoutUserRequest().load(parameters())
+        user = auth_service.logout_user(input)
+        return jsonify(
+            message='Successfully logged out user',
+            user=LogoutUserResponse().dump(user)
+        ), 200
     except Exception as e:
         return unknown_error(e)

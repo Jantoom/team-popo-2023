@@ -11,8 +11,7 @@ def get_violations(data: dict) -> Tuple[List[Violation], int]:
     violations = db.session.scalars(db.
         select(Violation).
         where(Violation.user_id == data['user_id'])).all()
-    total_violation_count = len(violations)
-    return violations, total_violation_count
+    return violations
 
 def get_violation(data: dict) -> Violation:
     violation = db.session.scalars(db.
@@ -21,9 +20,11 @@ def get_violation(data: dict) -> Violation:
     return violation
 
 def upload_violation(data: dict) -> Violation:
+    resource_url = upload_violation_to_s3_bucket(data)
+
     violation = Violation(
         user_id=data['user_id'],
-        resource_url=data['resource_url'],
+        resource_url=resource_url,
         input_type=data['type'],
         extra_comments=data['extra_comments']
     )
