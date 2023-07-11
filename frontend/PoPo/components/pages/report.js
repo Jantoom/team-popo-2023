@@ -33,20 +33,16 @@ export default class ReportPage extends React.Component {
         }
 
         this.sendImage = async () => {
-            console.log("Sending Report")
-            
             this.setState({isLoading: true, errorOccured: false})
             success = await APIService.sendReport(MainLayout.mainLay.state.reportImage, this.state.dropdownValue, this.state.extraComments)
             
             if (success) {
-                console.log("Report Uploaded Successfully :)")
                 this.setState({
                     isLoading: false,
                     errorOccured: false
                 })
                 NavigationService.navigate("camera")
             } else {
-                console.log("Report Failed Upload :(")
                 this.setState({
                     isLoading: false,
                     errorOccured: true

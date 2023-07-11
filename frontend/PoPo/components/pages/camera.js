@@ -61,6 +61,9 @@ export default class CameraPage extends React.Component {
     
 
     async componentDidMount() {
+        this.onOrientationChange()
+        DimensionService.addListener(this.onOrientationChange)
+
         this.setState({permission: await Camera.requestCameraPermissionsAsync()})
         if (!this.state.permission) {
             // Camera permissions are still loading
@@ -71,10 +74,7 @@ export default class CameraPage extends React.Component {
             this.setState({page: "permissions"})
         }
 
-        MainLayout.mainLay.setState({padTop: false, navBorderRad: 0})
-
-        this.onOrientationChange()
-        DimensionService.addListener(this.onOrientationChange)
+        MainLayout.mainLay.setState({padTop: false, navBorderRad: 0})        
     }
 
     componentWillUnmount() {

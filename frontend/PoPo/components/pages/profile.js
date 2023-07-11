@@ -4,6 +4,7 @@ import React, { cloneElement } from "react";
 import { ImageBackground } from 'react-native';
 import { StyleService, Colors } from '../../services/StyleServices';
 import { TextInput } from 'react-native';
+import APIService from '../../services/restAPIService';
 
 export default class ProfilePage extends React.Component {
     /**
@@ -28,7 +29,7 @@ export default class ProfilePage extends React.Component {
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', marginBottom:10}}>
                         <Text style={{color:Colors.main.textColo, fontFamily:"B612"}}>Name: </Text>
                         <TextInput backgroundColor={"red"} style={{marginRight:10, backgroundColor: Colors.main.background, color:Colors.main.textColor, paddingHorizontal:8, borderRadius:10, flex:1}}>Kelly Luo</TextInput>
-                        <TouchableHighlight style={{flex:1, backgroundColor:"#A3BFF4", borderRadius:5, height:"100%", alignItems:'center'}}><Text style={{flex:1, textAlignVertical:'center'}}>Edit Profile</Text></TouchableHighlight>
+                        <TouchableHighlight onPress={APIService.getReportHistory} style={{flex:1, backgroundColor:"#A3BFF4", borderRadius:5, height:"100%", alignItems:'center'}}><Text style={{flex:1, textAlignVertical:'center'}}>Edit Profile</Text></TouchableHighlight>
                     </View>
                     <View style={{display:"flex", flexDirection:'row', alignItems:'center', marginBottom:10}}>
                         <Text style={{color:Colors.main.textColor, fontFamily:"B612"}}>Email:  </Text>

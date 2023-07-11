@@ -1,3 +1,6 @@
+import MainLayout from "../components/mainLayout"
+import FileService from "./fileService"
+
 export default class APIService {
     static LAN_ADDRESS = "http://10.194.139.183:6400"
     static WEB_ADDRESS = "http://popo-1349446900.us-east-1.elb.amazonaws.com"
@@ -22,6 +25,21 @@ export default class APIService {
         return response
     }
 
+    static getData = async (
+        address = this.API_ADDRESS,
+        data = {
+            method: 'GET',
+            headers: {"Authorization": `Bearer ${APIService.ACCESS_TOKEN}`}
+        }
+    ) => {
+        response = await fetch(address, data).catch((reason) => {
+                console.log(reason)
+                response = undefined
+            })
+        
+        return response
+    }
+
     static sendReport = async (imageURI, type, extraComments) => {
         let formData = new FormData();
         formData.append("image", {
@@ -35,12 +53,12 @@ export default class APIService {
         response = await this.sendData(formData, `${APIService.API_ADDRESS}/api/v1/violations`)
         
         if (response !== undefined) {
-            console.log(response)
-            console.log(await response.text())
             if (response.status === 201) {
                 // Report Upload Success :)
                 return true
             } else {
+                console.log(response)
+                console.log(await (await response).text())
                 // Report Upload Failed :(
             }
         }
@@ -63,8 +81,6 @@ export default class APIService {
                 // Success Login
                 responseContent = await response.json()
                 accessToken = responseContent["access_token"]
-                console.log(accessToken)
-                console.log(responseContent)
                 APIService.ACCESS_TOKEN = accessToken
 
                 return {success:true, reason:""}
@@ -73,7 +89,7 @@ export default class APIService {
                 return {success:false, reason:"Username or password incorrect"}
             }
         }
-        console.log("login failed")
+
         return {success:false, reason:"Server not found"}
     }
 
@@ -96,6 +112,48 @@ export default class APIService {
             }
         }
 
+        return {success:false, reason:"Server not found"}
+    }
+
+    static running = false
+    static getReportHistory = async () => {
+        if (this.running === true) {
+            return {success: false, reason: "already"}
+        }
+
+        this.running = true
+        response = await this.getData(`${APIService.API_ADDRESS}/api/v1/violations`)
+        if (response !== undefined) {
+            reportHistory = await response.json()
+            violations = reportHistory["violations"]
+
+            var results = await Promise.all(violations.map(async (violation) => {
+                imageLink = violation["presigned_url"]
+                if (await FileService.checkCacheFileExists(violation["id"] + ".png") === false) {
+                    uri = await FileService.saveReportHistoryImage(imageLink, violation["id"])
+
+                    violation["uri"] = uri
+                    console.log(violation["uri"])
+                } else {
+                    violation["uri"] = FileService.getCacheDir() + violation["id"] + ".png"
+                }
+                return violation
+            }))
+
+
+            MainLayout.mainLay.setState({reportHistory: reportHistory})
+            if (response.status === 200) {
+                // Success 
+                this.running = false
+                return {success:true, reason:"", reportHistory: reportHistory}
+            } else {
+                // Failed 
+                this.running = false
+                return {success:false, reason:"Could Not Fetch Report History"}
+            }
+        }
+
+        this.running = false
         return {success:false, reason:"Server not found"}
     }
 }
