@@ -67,6 +67,9 @@ class PolyShape:
         self.avgX = None
         self.avgY = None
         self.avgAngle = None
+
+        self.avgVecX = None
+        self.avgVecY = None
     
     # In the format [[x1, y1], [x2, y2], ...]
     def getPositionList(self):
@@ -101,9 +104,19 @@ class PolyShape:
             totalAngle = 0
             numPoints = 0
 
+            totalVecX = 0
+            totalVecY = 0
+
             for point in points:
                 totalX += point.x
                 totalY += point.y
+
+                if ((point.vector.x > 0 and point.vector.y > 0) or (point.vector.x < 0 and point.vector.y < 0)):
+                    totalVecX += abs(point.vector.x)
+                    totalVecY += abs(point.vector.y)
+                elif (point.vector.x > 0 and point.vector.y < 0):
+                    totalVecX += point.vector.x * -1
+                    totalVecY += point.vector.y * -1
 
                 if (point != self.points[-1]):
                     totalAngle += point.vector.angle
@@ -113,6 +126,11 @@ class PolyShape:
             self.avgX = totalX / numPoints
             self.avgY = totalY / numPoints
             self.avgAngle = totalAngle / numPoints
+
+            # Different way of calculating the average angle, it seems to work better
+            self.avgVecX = totalVecX / numPoints
+            self.avgVecY = totalVecY / numPoints
+            self.avgAngle = math.degrees(math.atan(totalVecY / totalVecX))
 
         return self.avgX, self.avgY, self.avgAngle
     

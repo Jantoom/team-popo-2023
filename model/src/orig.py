@@ -19,7 +19,7 @@ def getAiData(file):
         file1 = open(file, "r")
         aiData = eval(file1.read())
         file1.close()
-        
+
     return aiData
 
 def start(file, showImage=False):
@@ -30,6 +30,7 @@ def start(file, showImage=False):
 
     # An array of booleans. Each boolean repesents if a parking line intersected with a car. Checks each line with each car.
     results = []
+    averageLines = []
 
     for shape in getPolyShapeFromClass("lines", polyShapes):
         # Create Vectors from Point to Point in Polygon
@@ -41,6 +42,7 @@ def start(file, showImage=False):
         
         # Gets the Average Line of Longest sides of Parking Line
         averageLine = shape.getAverageLine(shape.height)
+        averageLines.append(averageLine)
 
         
         for carShape in getPolyShapeFromClass("car", polyShapes):
@@ -48,7 +50,7 @@ def start(file, showImage=False):
             results.append(doesIntersect)
     
     if showImage:
-        drawImage(polyShapes, averageLine[0], averageLine[1])
+        drawImage(polyShapes, averageLines, file)
     
     # Returns true if any line intersects with any car
     for result in results:
