@@ -41,7 +41,7 @@ export default class FileService {
     static checkCacheFileExists = async (fileName) => {
       this.ensureDirectories(FileSystem.cacheDirectory + "CachedImages/")
       dirInfo = await FileSystem.getInfoAsync(FileSystem.cacheDirectory + "CachedImages/" + fileName);
-      console.log(dirInfo)
+
       return dirInfo["exists"]
     }
 
@@ -53,9 +53,8 @@ export default class FileService {
     }
 
     static saveFile = async (downloadURI, savePathDir, fileName) => {
-      this.ensureDirectories(savePathDir)
       res = await FileSystem.downloadAsync(downloadURI, savePathDir + fileName)
-      console.log(res)
+
       if (res["status"] === 400) {
         FileSystem.deleteAsync(res["uri"])
         return ""
@@ -65,7 +64,6 @@ export default class FileService {
     }
 
     static saveReportHistoryImage = async (imageLink, imageID) => {
-      console.log("DOWNLOADING IMAGE")
       uri = await this.saveFile(imageLink, FileSystem.cacheDirectory+ "CachedImages/", imageID + ".png")
       return uri
     }
