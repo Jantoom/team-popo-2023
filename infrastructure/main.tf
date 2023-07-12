@@ -37,11 +37,6 @@ locals {
     secret_key = "abc123"
 }
 
-# resource "local_file" "url" {
-#   content  = "VITE_URI=http://${aws_lb.popo.dns_name}"
-#   filename = "../frontend/.env"
-# }
-
 data "aws_ecr_authorization_token" "ecr_token" {}
 
 data "aws_caller_identity" "current" {}
@@ -68,7 +63,3 @@ output "database_uri" {
 output "load_balancer_back_dns" { 
    value = "http://${aws_lb.popo.dns_name}/api/v1" 
 }
-
-# output "load_balancer_front_dns" {
-#   value = "http://${aws_lb.front.dns_name}/"
-# }

@@ -1,6 +1,6 @@
 # Violation List Routes
-from src.violations.schemas.requests.get_violation_list_request import GetViolationListRequest
-from src.violations.schemas.requests.upload_violation_request import UploadViolationRequest
+from src.violations.schemas.get_violation_list import GetViolationListRequest, GetViolationListResponse
+from src.violations.schemas.upload_violation import UploadViolationRequest, UploadViolationResponse
 # Violation Routes
-from src.violations.schemas.requests.get_violation_request import GetViolationRequest
-from src.violations.schemas.requests.delete_violation_request import DeleteViolationRequest
+from src.violations.schemas.get_violation import GetViolationRequest, GetViolationResponse
+from src.violations.schemas.delete_violation import DeleteViolationRequest, DeleteViolationResponse

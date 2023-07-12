@@ -1,8 +1,8 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required
-from src.core.util import parse_input, unknown_error
+from src.core.util import parameters, unknown_error
 from src.admin import api
-from src.admin.schemas import GetUserListRequest, DeleteViolationRequest
+from src.admin.schemas import GetUserListRequest, GetUserListResponse, DeleteViolationRequest, DeleteViolationResponse
 from src.admin.services import admin_service
 
 @api.route('/users', methods=['GET'])
@@ -10,11 +10,12 @@ from src.admin.services import admin_service
 def get_user_list():
     """List all the users."""
     try:
-        input = parse_input(GetUserListRequest())
-        result = []
-        for user in admin_service.get_users(input):
-            result.append(user.to_dict())
-        return jsonify(result), 200
+        input = GetUserListRequest().load(parameters())
+        users = admin_service.get_users(input)
+        return jsonify(
+            message='',
+            users=GetUserListResponse(many=True).dump(users)
+        ), 200
     except Exception as e:
         return unknown_error(e)
 
@@ -23,11 +24,12 @@ def get_user_list():
 def delete_violation(violation_id):
     """Deletes all references to an violation."""
     try:
-        input = parse_input(DeleteViolationRequest())
+        input = DeleteViolationRequest().load(parameters())
         violation = admin_service.delete_violation(input)
-        if violation is not None:
-            return 'Successfully deleted violation.', 201
-        else:
-            return 'Failed to delete violation.', 400
+        return jsonify(
+            message='Successfully deleted violation.', 
+            violation=DeleteViolationResponse.dump(violation)
+        ), 201
+        return 'Failed to delete violation.', 400
     except Exception as e:
         return unknown_error(e)

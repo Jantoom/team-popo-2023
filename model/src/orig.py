@@ -236,5 +236,3 @@ def start(file, showImage=False):
         if result:
             return result
     return False
-
-print(start("data.txt", showImage=False))

@@ -12,8 +12,9 @@ def delete_violation(data: dict) -> Violation:
         select(Violation).
         where(Violation.id == data['violation_id'])).first()
     if violation is not None:
+        violation_copy = Violation(**violation.__dict__)
         db.session.delete(violation)
         db.session.commit()
-        return violation
+        return violation_copy
     else:
         return None

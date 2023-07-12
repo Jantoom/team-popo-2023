@@ -1,2 +1,2 @@
-from src.admin.schemas.requests.get_user_list_request import GetUserListRequest
-from src.admin.schemas.requests.delete_violation_request import DeleteViolationRequest
+from src.admin.schemas.delete_violation import DeleteViolationRequest, DeleteViolationResponse
+from src.admin.schemas.get_user_list import GetUserListRequest, GetUserListResponse

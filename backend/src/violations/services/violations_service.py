@@ -1,8 +1,10 @@
 import boto3, random, string, io, os
 from typing import List, Tuple
 from botocore.exceptions import ClientError
+from celery.result import AsyncResult
 from src.core import db
-from src.core.models import Violation
+from src.core.models import Violation, StatusEnum
+from src.model.classify import classify_violation_task
 
 BUCKET_NAME = os.getenv('S3_BUCKET', None) # Set your S3 bucket name in code/docker-compose.env
 S3 = boto3.client('s3')
@@ -11,8 +13,7 @@ def get_violations(data: dict) -> Tuple[List[Violation], int]:
     violations = db.session.scalars(db.
         select(Violation).
         where(Violation.user_id == data['user_id'])).all()
-    total_violation_count = len(violations)
-    return violations, total_violation_count
+    return violations
 
 def get_violation(data: dict) -> Violation:
     violation = db.session.scalars(db.
@@ -21,15 +22,21 @@ def get_violation(data: dict) -> Violation:
     return violation
 
 def upload_violation(data: dict) -> Violation:
+    resource_url = upload_violation_to_s3_bucket(data)
+
     violation = Violation(
         user_id=data['user_id'],
-        resource_url=data['resource_url'],
+        resource_url=resource_url,
         input_type=data['type'],
         extra_comments=data['extra_comments']
     )
     db.session.add(violation)
     db.session.commit()
     db.session.refresh(violation)
+
+    classify_violation(violation, data['image'])
+    db.session.refresh(violation)
+
     return violation
     
 def delete_violation(data: dict) -> Violation:
@@ -63,3 +70,14 @@ def create_presigned_url(resource_url: str) -> str:
         print(e)
         return ""
     return response
+
+### --------- CLASSIFICATION --------- ###
+
+def classify_violation(violation, image):
+    if violation.status == StatusEnum.UPLOADED.value:
+        violation.status = StatusEnum.CLASSIFYING.value
+        task = classify_violation_task.apply_async(args=[image])
+        result = AsyncResult(task)
+    db.session.commit()
+    result.get()
+    return result

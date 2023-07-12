@@ -19,7 +19,7 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 # Build/tag/push images to AWS, and force redeployment of services
 
 # Service-based
-if [ $# -eq 0 ] || [ "$1" -eq 0 ]; then
+if [ $# -eq 0 ] || [ "$1" -eq "0" ]; then
     for image in ${images//, / }
     do
         docker build -t $image -f backend/src/$image/Dockerfile .
@@ -32,7 +32,7 @@ if [ $# -eq 0 ] || [ "$1" -eq 0 ]; then
 fi
 
 # Monolithic
-if [ $# -eq 0 ] && [ "$1" -eq 1 ]; then
+if [ $# -eq 0 ] && [ "$1" -eq "1" ]; then
     docker build -t monolithic -f backend/src/monolithic/Dockerfile .
     docker tag monolithic:latest $dns/monolithic:latest
     docker push $dns/monolithic:latest

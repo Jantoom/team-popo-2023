@@ -7,7 +7,8 @@
 @baseUrl = http://{{localDns}}/api/v1
 
 ### ------------------------------ USERS ------------------------------
-@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4ODUyNzA0MiwianRpIjoiZWQzNmIxOWItNGI4Yy00ZGU3LWE3ZTItMzAzZWUzYzNhMzA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjQ5YzMyMmY1LWQ3ZGMtNDJlOC1iZWY0LTI4MjllMmQ3ZTc3MyIsIm5iZiI6MTY4ODUyNzA0MiwiZXhwIjoxNjg4NjEzNDQyfQ.hw4n-RarN_h-fTHJVO9aP90cm4lW-OTwsvpkzcLgzb8
+@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4ODk1NjA1MiwianRpIjoiMGIzNTQ5MDYtZGM3Yi00YThmLTljZjctMzJiZjVkYmM2ZWRlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImZhMzBhYTBlLWJlMGQtNGVjNi05MTM3LTQ4MzZjZWNlZmM3YSIsIm5iZiI6MTY4ODk1NjA1MiwiZXhwIjoxNjg5MDQyNDUyfQ.MMsYnyxDZYwXp3yxkWGfjUSwpRPM-Z7YHnEwEofMU9k
+    "id": "fa30aa0e-be0d-4ec6-9137-4836cecefc7a
 
 ### Query the health of the user service.
 GET {{baseUrl}}/auth/health
@@ -16,16 +17,16 @@ GET {{baseUrl}}/auth/health
 POST {{baseUrl}}/auth/signup
 Content-Type: application/x-www-form-urlencoded
 
-&email=sementha2@example.org
-&username=sementha
+&email=jantoooom@example.org
+&username=jantoooom
 &password=123
 
 ### Logs in a user.
 POST {{baseUrl}}/auth/login
 Content-Type: application/x-www-form-urlencoded
 
-&username=B
-&password=B
+&username=jantoooom
+&password=123
 
 ### Logs out a user.
 GET {{baseUrl}}/auth/logout

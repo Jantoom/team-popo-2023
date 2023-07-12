@@ -18,13 +18,16 @@ def login_user(data: dict) -> User:
     user = db.session.scalars(db.
         select(User).
         where(User.username == data['username'])).first()
-    if user and check_password_hash(user.password_hash, data['password']):
+    if check_password_hash(user.password_hash, data['password']):
         return user
     else:
         return None
     
 def logout_user(data: dict) -> None:
-    return None
+    user = db.session.scalars(db.
+        select(User).
+        where(User.username == data['username'])).first()
+    return user
 
 def get_users(data: dict) -> List[User]:
     users = db.session.scalars(db.
