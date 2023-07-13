@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from geometry import getPolyShapeFromClass
+from src.model.geometry import getPolyShapeFromClass
 
 def drawImage(polyShapes, extendedLines, file):
         # Create Image Canvas

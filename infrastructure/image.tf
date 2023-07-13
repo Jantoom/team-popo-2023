@@ -30,6 +30,14 @@ resource "aws_ecr_repository" "violations" {
   }
 }
 
+resource "aws_ecr_repository" "model" {
+  name = "model"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
 resource "docker_image" "monolithic" {
   name = "${aws_ecr_repository.monolithic.repository_url}:latest"
   
@@ -66,6 +74,15 @@ resource "docker_image" "violations" {
   }
 }
 
+resource "docker_image" "model" {
+  name = "${aws_ecr_repository.model.repository_url}:latest"
+
+  build {
+    context    = ".."
+    dockerfile = "backend/src/model/Dockerfile"
+  }
+}
+
 resource "docker_registry_image" "monolithic" {
   name = docker_image.monolithic.name
 }
@@ -80,4 +97,8 @@ resource "docker_registry_image" "auth" {
 
 resource "docker_registry_image" "violations" {
   name = docker_image.violations.name
+}
+
+resource "docker_registry_image" "model" {
+  name = docker_image.model.name
 }

@@ -15,7 +15,7 @@ def get_violation_list():
         violations = violations_service.get_violations(input)
         return jsonify(
             message='',
-            violations=GetViolationListResponse().dump(violations)
+            violations=GetViolationListResponse(many=True).dump(violations)
         ), 200
     except Exception as e:
         return unknown_error(e)

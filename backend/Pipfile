@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 boto3 = "*"
+redis = "*"
 flask = "*"
 flask-cors = "*"
 flask-jwt-extended = "*"
@@ -15,7 +16,8 @@ marshmallow-sqlalchemy = "*"
 psycopg2-binary = "*"
 pytest = "*"
 pytest-mock = "*"
-celery = "*"
+celery = {extras = ["sqs"], version = "*"}
+opencv-python = "*"
 
 [dev-packages]
 

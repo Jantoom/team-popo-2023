@@ -1,7 +1,6 @@
 import boto3, random, string, io, os
 from typing import List, Tuple
 from botocore.exceptions import ClientError
-from celery.result import AsyncResult
 from src.core import db
 from src.core.models import Violation, StatusEnum
 from src.model.classify import classify_violation_task
@@ -30,12 +29,12 @@ def upload_violation(data: dict) -> Violation:
         input_type=data['type'],
         extra_comments=data['extra_comments']
     )
+    violation.status = StatusEnum.UPLOADED.value
     db.session.add(violation)
     db.session.commit()
     db.session.refresh(violation)
 
-    classify_violation(violation, data['image'])
-    db.session.refresh(violation)
+    violation = classify_violation(violation)
 
     return violation
     
@@ -68,16 +67,15 @@ def create_presigned_url(resource_url: str) -> str:
     except ClientError as e:
         #TODO handle better
         print(e)
-        return ""
+        return ''
     return response
 
 ### --------- CLASSIFICATION --------- ###
 
-def classify_violation(violation, image):
+def classify_violation(violation):
     if violation.status == StatusEnum.UPLOADED.value:
         violation.status = StatusEnum.CLASSIFYING.value
-        task = classify_violation_task.apply_async(args=[image])
-        result = AsyncResult(task)
-    db.session.commit()
-    result.get()
-    return result
+        task = classify_violation_task.apply_async(args=[violation.id, violation.resource_url])
+    else:
+        raise Exception("Violation wasn't in an uploaded state.")
+    return violation

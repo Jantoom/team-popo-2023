@@ -1,9 +1,7 @@
-import cv2
-
-from geometry import *
-from api import *
-from draw import *
-from util import *
+from src.model.geometry import *
+from src.model.api import *
+from src.model.draw import *
+from src.model.util import *
 
 def getAiData(file):
     useAPI = False

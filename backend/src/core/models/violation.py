@@ -28,18 +28,7 @@ class Violation(db.Model):
     status = db.Column(db.String(30), nullable=False, default=StatusEnum.NONE.value)
     extra_comments = db.Column(db.String(1000), nullable=False, default='')
     resource_url = db.Column(db.String(200), nullable=False)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'date_created': self.date_created,
-            'input_type': self.input_type,
-            'predicted_type': self.predicted_type,
-            'status': self.status,
-            'extra_comments': self.extra_comments,
-            'resource_url': self.resource_url
-        }
+    masked_url = db.Column(db.String(200), default='')
     
     def __repr__(self):
-        return f'<Violation({self.id}, {self.user_id}, {self.date_created}, {self.input_type}, {self.predicted_type}, {self.status}, {self.extra_comments}, {self.resource_url})>'
+        return f'<Violation({self.id}, {self.user_id}, {self.date_created}, {self.input_type}, {self.predicted_type}, {self.status}, {self.extra_comments}, {self.resource_url}, {self.masked_url})>'

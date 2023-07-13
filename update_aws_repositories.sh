@@ -17,6 +17,10 @@ cp credentials ~/.aws/
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $dns
 
 # Build/tag/push images to AWS, and force redeployment of services
+docker build -t model -f backend/src/model/Dockerfile .
+docker tag model:latest $dns/model:latest
+docker push $dns/model:latest
+aws ecs update-service --cluster popo --service model --force-new-deployment --region us-east-1 --no-cli-pager
 
 # Service-based
 if [ $# -eq 0 ] || [ "$1" -eq "0" ]; then
@@ -32,7 +36,7 @@ if [ $# -eq 0 ] || [ "$1" -eq "0" ]; then
 fi
 
 # Monolithic
-if [ $# -eq 0 ] && [ "$1" -eq "1" ]; then
+if [ $# -eq 0 ] || [ "$1" -eq "1" ]; then
     docker build -t monolithic -f backend/src/monolithic/Dockerfile .
     docker tag monolithic:latest $dns/monolithic:latest
     docker push $dns/monolithic:latest

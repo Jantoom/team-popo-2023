@@ -87,6 +87,20 @@ resource "aws_ecs_service" "violations" {
   }
 }
 
+resource "aws_ecs_service" "model" { 
+    name            = "model" 
+    cluster         = aws_ecs_cluster.popo.id 
+    task_definition = aws_ecs_task_definition.model.arn 
+    desired_count   = 1 
+    launch_type     = "FARGATE" 
+    
+    network_configuration { 
+        subnets          = data.aws_subnets.private.ids 
+        security_groups  = [aws_security_group.model.id] 
+        assign_public_ip = true 
+    } 
+}
+
 resource "aws_ecs_task_definition" "monolithic" {
   family                   = "monolithic"
   network_mode             = "awsvpc"
@@ -95,7 +109,7 @@ resource "aws_ecs_task_definition" "monolithic" {
   memory                   = 2048
   execution_role_arn       = data.aws_iam_role.lab.arn
   task_role_arn            = data.aws_iam_role.lab.arn
-  depends_on               = [ aws_s3_bucket.violation-images ]
+  depends_on               = [ aws_s3_bucket.violation_images ]
 
   container_definitions = <<DEFINITION
   [
@@ -111,7 +125,10 @@ resource "aws_ecs_task_definition" "monolithic" {
       "environment": [
         { "name": "SQLALCHEMY_DATABASE_URI", "value": "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
         { "name": "SECRET_KEY", "value": "${local.secret_key}" },
-        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation-images.bucket}" }
+        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation_images.bucket}" },
+        { "name": "CELERY_BROKER_URL", "value": "sqs://" },
+        { "name": "CELERY_RESULT_BACKEND", "value": "db+postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
+        { "name": "CELERY_DEFAULT_QUEUE", "value": "popo-model" }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -135,7 +152,7 @@ resource "aws_ecs_task_definition" "admin" {
   memory                   = 2048
   execution_role_arn       = data.aws_iam_role.lab.arn
   task_role_arn            = data.aws_iam_role.lab.arn
-  depends_on               = [ aws_s3_bucket.violation-images ]
+  depends_on               = [ aws_s3_bucket.violation_images ]
 
   container_definitions = <<DEFINITION
   [
@@ -151,7 +168,10 @@ resource "aws_ecs_task_definition" "admin" {
       "environment": [
         { "name": "SQLALCHEMY_DATABASE_URI", "value": "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
         { "name": "SECRET_KEY", "value": "${local.secret_key}" },
-        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation-images.bucket}" }
+        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation_images.bucket}" },
+        { "name": "CELERY_BROKER_URL", "value": "sqs://" },
+        { "name": "CELERY_RESULT_BACKEND", "value": "db+postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
+        { "name": "CELERY_DEFAULT_QUEUE", "value": "popo-model" }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -175,7 +195,7 @@ resource "aws_ecs_task_definition" "auth" {
   memory                   = 2048
   execution_role_arn       = data.aws_iam_role.lab.arn
   task_role_arn            = data.aws_iam_role.lab.arn
-  depends_on               = [ aws_s3_bucket.violation-images ]
+  depends_on               = [ aws_s3_bucket.violation_images ]
 
   container_definitions = <<DEFINITION
   [
@@ -191,7 +211,10 @@ resource "aws_ecs_task_definition" "auth" {
       "environment": [
         { "name": "SQLALCHEMY_DATABASE_URI", "value": "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
         { "name": "SECRET_KEY", "value": "${local.secret_key}" },
-        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation-images.bucket}" }
+        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation_images.bucket}" },
+        { "name": "CELERY_BROKER_URL", "value": "sqs://" },
+        { "name": "CELERY_RESULT_BACKEND", "value": "db+postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
+        { "name": "CELERY_DEFAULT_QUEUE", "value": "popo-model" }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -215,7 +238,7 @@ resource "aws_ecs_task_definition" "violations" {
   memory                   = 2048
   execution_role_arn       = data.aws_iam_role.lab.arn
   task_role_arn            = data.aws_iam_role.lab.arn
-  depends_on               = [ aws_s3_bucket.violation-images ]
+  depends_on               = [ aws_s3_bucket.violation_images ]
 
   container_definitions = <<DEFINITION
   [
@@ -231,12 +254,58 @@ resource "aws_ecs_task_definition" "violations" {
       "environment": [
         { "name": "SQLALCHEMY_DATABASE_URI", "value": "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
         { "name": "SECRET_KEY", "value": "${local.secret_key}" },
-        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation-images.bucket}" }
+        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation_images.bucket}" },
+        { "name": "CELERY_BROKER_URL", "value": "sqs://" },
+        { "name": "CELERY_RESULT_BACKEND", "value": "db+postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
+        { "name": "CELERY_DEFAULT_QUEUE", "value": "popo-model" }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/popo/violations",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group": "true"
+        }
+      }
+    }
+  ]
+  DEFINITION
+}
+
+resource "aws_ecs_task_definition" "model" { 
+  family                   = "model"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 1024
+  memory                   = 2048
+  execution_role_arn       = data.aws_iam_role.lab.arn
+  task_role_arn            = data.aws_iam_role.lab.arn
+  depends_on               = [ aws_s3_bucket.violation_images ]
+
+  container_definitions = <<DEFINITION
+  [
+    { 
+      "name": "model",
+      "image": "${docker_registry_image.model.name}",
+      "cpu": 1024,
+      "memory": 2048,
+      "networkMode": "awsvpc",
+      "portMappings": [
+        { "containerPort": 6379, "hostPort": 6379 }
+      ],
+      "environment": [
+        { "name": "SQLALCHEMY_DATABASE_URI", "value": "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
+        { "name": "SECRET_KEY", "value": "${local.secret_key}" },
+        { "name": "S3_BUCKET", "value": "${aws_s3_bucket.violation_images.bucket}" },
+        { "name": "CELERY_BROKER_URL", "value": "sqs://" },
+        { "name": "CELERY_RESULT_BACKEND", "value": "db+postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.database.address}:${aws_db_instance.database.port}/${aws_db_instance.database.db_name}" },
+        { "name": "CELERY_DEFAULT_QUEUE", "value": "popo-model" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/popo/model",
           "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs",
           "awslogs-create-group": "true"
@@ -349,4 +418,30 @@ resource "aws_security_group" "violations" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group" "model" { 
+    name        = "model" 
+    description = "Team Popo Model Security Group" 
+    
+    ingress { 
+        from_port   = 6379 
+        to_port     = 6379 
+        protocol    = "tcp" 
+        cidr_blocks = ["0.0.0.0/0"] 
+    } 
+    
+    ingress { 
+        from_port   = 22 
+        to_port     = 22 
+        protocol    = "tcp" 
+        cidr_blocks = ["0.0.0.0/0"] 
+    } 
+    
+    egress { 
+        from_port   = 0 
+        to_port     = 0 
+        protocol    = "-1" 
+        cidr_blocks = ["0.0.0.0/0"] 
+    } 
 }
