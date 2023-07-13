@@ -4,7 +4,6 @@ import React from "react";
 import { StyleService, Colors } from '../../services/StyleServices';
 import NavigationService from '../../services/navigationService';
 import DimensionService from '../../services/dimensionService';
-import MainLayout from '../mainLayout';
 import APIService from '../../services/restAPIService';
 
 export default class HomePage extends React.Component {
