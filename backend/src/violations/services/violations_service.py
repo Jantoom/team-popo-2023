@@ -1,9 +1,8 @@
 import boto3, random, string, io, os
 from typing import List, Tuple
 from botocore.exceptions import ClientError
-from celery.result import AsyncResult
 from src.core import db
-from src.core.models import Violation, StatusEnum, TypeEnum
+from src.core.models import Violation, StatusEnum
 from src.model.classify import classify_violation_task
 
 BUCKET_NAME = os.getenv('S3_BUCKET', None) # Set your S3 bucket name in code/docker-compose.env
@@ -35,9 +34,9 @@ def upload_violation(data: dict) -> Violation:
     db.session.commit()
     db.session.refresh(violation)
 
-    mask_image = classify_violation(violation, data['image'])
+    violation = classify_violation(violation)
 
-    return violation, mask_image
+    return violation
     
 def delete_violation(data: dict) -> Violation:
     violation = db.session.scalars(db.
@@ -73,17 +72,10 @@ def create_presigned_url(resource_url: str) -> str:
 
 ### --------- CLASSIFICATION --------- ###
 
-def classify_violation(violation, image):
+def classify_violation(violation):
     if violation.status == StatusEnum.UPLOADED.value:
         violation.status = StatusEnum.CLASSIFYING.value
-        task = classify_violation_task.apply_async(args=[image, violation.id])
-        result = AsyncResult(task)
+        task = classify_violation_task.apply_async(args=[violation.id, violation.resource_url])
     else:
-        raise Exception("Violation wasn't in uploaded state.")
-    db.session.commit()
-    result.get()
-    if result.args[0]:
-        violation.predicted_type = TypeEnum.TWO_SPACES.value
-    db.session.commit()
-    db.session.refresh(violation)
-    return result.args[1]
+        raise Exception("Violation wasn't in an uploaded state.")
+    return violation

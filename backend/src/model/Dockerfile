@@ -9,13 +9,15 @@ RUN pip3 install pipenv
 WORKDIR /app
 # Install pipenv dependencies
 COPY backend/Pipfile backend/Pipfile.lock ./
+RUN pipenv install --system --deploy && rm Pipfile Pipfile.lock
+COPY model/Pipfile model/Pipfile.lock ./
 RUN pipenv install --system --deploy
-COPY model/Pipfile model/Pipfile.lock extra/
-RUN cd extra && pipenv install --system --deploy && cd ..
 # Copying our AWS credentials
 COPY credentials /root/.aws/credentials
 # Copying our application into the container
 COPY backend/src/core src/core
-COPY model/src/model backend/src/model src/model/
+COPY backend/src/model src/model
+COPY model/src/model src/model
+COPY model/__init__.py ./
 # Running our application
 CMD ["celery", "--app", "src.model.classify", "worker", "--loglevel=info"]

@@ -7,7 +7,7 @@
 @baseUrl = http://{{localDns}}/api/v1
 
 ### ------------------------------ USERS ------------------------------
-@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4OTIyMjM0MiwianRpIjoiY2NkODFkZmItODI1NC00NDBhLThlMTYtOWRjODgxYzA1Zjc5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjI2MDM5OThiLTQzNjktNGU5Ni1hYTgzLWQ4ZmVmMjI3ODhkZSIsIm5iZiI6MTY4OTIyMjM0MiwiZXhwIjoxNjg5MzA4NzQyfQ.ydsJqki7B4-_OFlYov3mASob0IMQzBuPPLVF3Je_v_Y
+@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4OTI2NjQyNSwianRpIjoiODBhZmNkNGYtODQwYi00OWNjLWFhNTYtZjVjYWI0ZWUwNzExIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjJkMTEwOGUyLTczMTYtNGQ3MC05YjlkLTZkMDk2ZjIyYjk1YyIsIm5iZiI6MTY4OTI2NjQyNSwiZXhwIjoxNjg5MzUyODI1fQ.inTrR2x2Mpl8d6p7E0i4jY4TAMnL9OJuc-Dd3zyTB5I
 
 ### Query the health of the user service.
 GET {{baseUrl}}/auth/health
@@ -32,7 +32,7 @@ GET {{baseUrl}}/auth/logout
 Authorization: {{testToken}}
 
 ### ------------------------------ VIOLATIONS ------------------------------
-@testViolation = 72c28bee-a6a9-4a4e-872e-a660cdba33e2
+@testViolation = 57dde2bf-2607-4f48-bb05-ea248292e702
 
 ### Query the health of the violations service.
 GET {{baseUrl}}/violations/health
@@ -50,6 +50,10 @@ Content-Type: application/json
     "type": "TWO_SPACES"
 }
 
+### List one violation associated with the session account.
+GET {{baseUrl}}/violations/{{testViolation}}
+Authorization: {{testToken}}
+
 ### ------------------------------ ADMIN ------------------------------
 
 ### Query the health of the admin service.
@@ -61,6 +65,14 @@ Authorization: {{testToken}}
 
 ### Delete a violation.
 DELETE {{baseUrl}}/admin/{{testViolation}}
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+}
+
+### Reset all tables by dropping and re-creating them.
+GET {{baseUrl}}/admin/reset_database
 Authorization: {{testToken}}
 Content-Type: application/json
 

@@ -38,7 +38,16 @@ resource "aws_appautoscaling_target" "violations" {
     depends_on = [aws_ecs_service.violations]
 } 
 
-resource "aws_appautoscaling_policy" "monolithic-cpu" { 
+resource "aws_appautoscaling_target" "model" { 
+    max_capacity       = 10 
+    min_capacity       = 1 
+    resource_id        = "service/popo/model" 
+    scalable_dimension = "ecs:service:DesiredCount" 
+    service_namespace  = "ecs"
+    depends_on = [aws_ecs_service.model]
+} 
+
+resource "aws_appautoscaling_policy" "monolithic_cpu" { 
     name               = "monolithic_cpu" 
     policy_type        = "TargetTrackingScaling" 
     resource_id        = aws_appautoscaling_target.monolithic.resource_id 
@@ -54,7 +63,7 @@ resource "aws_appautoscaling_policy" "monolithic-cpu" {
     } 
 }
 
-resource "aws_appautoscaling_policy" "admin-cpu" { 
+resource "aws_appautoscaling_policy" "admin_cpu" { 
     name               = "admin_cpu" 
     policy_type        = "TargetTrackingScaling" 
     resource_id        = aws_appautoscaling_target.admin.resource_id 
@@ -70,7 +79,7 @@ resource "aws_appautoscaling_policy" "admin-cpu" {
     } 
 }
 
-resource "aws_appautoscaling_policy" "auth-cpu" { 
+resource "aws_appautoscaling_policy" "auth_cpu" { 
     name               = "auth_cpu" 
     policy_type        = "TargetTrackingScaling" 
     resource_id        = aws_appautoscaling_target.auth.resource_id 
@@ -86,7 +95,7 @@ resource "aws_appautoscaling_policy" "auth-cpu" {
     } 
 }
 
-resource "aws_appautoscaling_policy" "violations-cpu" { 
+resource "aws_appautoscaling_policy" "violations_cpu" { 
     name               = "violations_cpu" 
     policy_type        = "TargetTrackingScaling" 
     resource_id        = aws_appautoscaling_target.violations.resource_id 
@@ -101,3 +110,85 @@ resource "aws_appautoscaling_policy" "violations-cpu" {
         target_value = 10 
     } 
 } 
+
+resource "aws_appautoscaling_policy" "sqs_messages_up_policy" { 
+    name               = "sqs_messages" 
+    policy_type        = "StepScaling" 
+    resource_id        = aws_appautoscaling_target.model.resource_id 
+    scalable_dimension = aws_appautoscaling_target.model.scalable_dimension 
+    service_namespace  = aws_appautoscaling_target.model.service_namespace 
+    
+    step_scaling_policy_configuration {
+        adjustment_type         = "ChangeInCapacity"
+        cooldown                = 60
+        metric_aggregation_type = "Average"
+
+        step_adjustment {
+            scaling_adjustment = 1
+            metric_interval_lower_bound = 0
+            metric_interval_upper_bound = 3
+        }
+        step_adjustment {
+            scaling_adjustment = 2
+            metric_interval_lower_bound = 3
+            metric_interval_upper_bound = 8
+        }
+        step_adjustment {
+            scaling_adjustment          = 3
+            metric_interval_lower_bound = 8
+        }
+    }
+}
+
+resource "aws_appautoscaling_policy" "sqs_messages_down_policy" {
+    name               = "sqs_messages_down_policy"
+    policy_type        = "StepScaling"
+    resource_id        = aws_appautoscaling_target.model.resource_id
+    scalable_dimension = aws_appautoscaling_target.model.scalable_dimension
+    service_namespace  = aws_appautoscaling_target.model.service_namespace
+
+    step_scaling_policy_configuration {
+        adjustment_type         = "ChangeInCapacity"
+        cooldown                = 60
+        metric_aggregation_type = "Average"
+
+        step_adjustment {
+            scaling_adjustment          = -1
+            metric_interval_upper_bound = 0
+        }
+    }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_messages_alarm_up" {
+    alarm_name          = "sqs_messages_alarm_up"
+    comparison_operator = "GreaterThanOrEqualToThreshold"
+    evaluation_periods  = 1
+    metric_name         = "ApproximateNumberOfMessagesVisible"
+    namespace           = "AWS/SQS"
+    period              = 10
+    statistic           = "Sum"
+    threshold           = 2
+    alarm_description   = "Alarm when queue length is greater than or equal to 10"
+    alarm_actions       = [aws_appautoscaling_policy.sqs_messages_up_policy.arn]
+
+    dimensions = {
+        QueueName = aws_sqs_queue.model_queue.name
+    }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_messages_alarm_down" {
+    alarm_name          = "sqs_messages_alarm_down"
+    comparison_operator = "LessThanOrEqualToThreshold"
+    evaluation_periods  = 1
+    metric_name         = "ApproximateNumberOfMessagesVisible"
+    namespace           = "AWS/SQS"
+    period              = 10
+    statistic           = "Sum"
+    threshold           = 1
+    alarm_description   = "Alarm when queue length is less than or equal to 10"
+    alarm_actions       = [aws_appautoscaling_policy.sqs_messages_down_policy.arn]
+
+    dimensions = {
+        QueueName = aws_sqs_queue.model_queue.name
+    }
+}

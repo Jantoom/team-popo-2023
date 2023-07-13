@@ -1,3 +1,3 @@
-resource "aws_sqs_queue" "popo-model-queue" { 
+resource "aws_sqs_queue" "model_queue" { 
    name = "popo-model" 
 }

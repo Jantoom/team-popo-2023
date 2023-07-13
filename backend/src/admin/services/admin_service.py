@@ -18,3 +18,11 @@ def delete_violation(data: dict) -> Violation:
         return violation_copy
     else:
         return None
+    
+def reset_database(data: dict) -> None:
+    db.drop_all()
+    db.session.commit()
+    from src.core.models import User, Violation
+    db.create_all()
+    db.session.commit()
+    return None

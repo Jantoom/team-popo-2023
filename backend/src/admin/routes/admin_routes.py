@@ -2,7 +2,8 @@ from flask import jsonify
 from flask_jwt_extended import jwt_required
 from src.core.util import parameters, unknown_error
 from src.admin import api
-from src.admin.schemas import GetUserListRequest, GetUserListResponse, DeleteViolationRequest, DeleteViolationResponse
+from src.admin.schemas import GetUserListRequest, GetUserListResponse, \
+    DeleteViolationRequest, DeleteViolationResponse, ResetDatabaseRequest, ResetDatabaseResponse
 from src.admin.services import admin_service
 
 @api.route('/users', methods=['GET'])
@@ -31,5 +32,19 @@ def delete_violation(violation_id):
             violation=DeleteViolationResponse.dump(violation)
         ), 201
         return 'Failed to delete violation.', 400
+    except Exception as e:
+        return unknown_error(e)
+    
+@api.route('/reset_database', methods=['GET'])
+@jwt_required()
+def reset_database():
+    """Reset all tables by dropping and re-creating them."""
+    try:
+        input = ResetDatabaseRequest().load(parameters())
+        foo = admin_service.reset_database(input)
+        return jsonify(
+            message='Successfully reset databases.',
+            dummy=ResetDatabaseResponse().dump({})
+        ), 200
     except Exception as e:
         return unknown_error(e)

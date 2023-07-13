@@ -26,11 +26,10 @@ def upload_violation():
     """Upload a new violation to the marketplace."""
     try:
         input = UploadViolationRequest().load(parameters())
-        violation, mask_image = violations_service.upload_violation(input)
+        violation = violations_service.upload_violation(input)
         return jsonify(
             message='Successfully uploaded violation.',
-            violation=UploadViolationResponse().dump(violation),
-            mask_image=mask_image
+            violation=UploadViolationResponse().dump(violation)
         ), 201
         return 'Failed to upload violation.', 400
     except ClientError as e:
