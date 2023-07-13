@@ -3,7 +3,7 @@ import FileService from "./fileService"
 
 export default class APIService {
     static LAN_ADDRESS = "http://10.194.139.183:6400"
-    static WEB_ADDRESS = "http://popo-1349446900.us-east-1.elb.amazonaws.com"
+    static WEB_ADDRESS = "http://popo-202235509.us-east-1.elb.amazonaws.com"
 
     static API_ADDRESS = APIService.WEB_ADDRESS
     static ACCESS_TOKEN = ""
@@ -58,7 +58,7 @@ export default class APIService {
                 return true
             } else {
                 console.log(response)
-                console.log(await (await response).text())
+                console.log(await response.text())
                 // Report Upload Failed :(
             }
         }
@@ -76,11 +76,12 @@ export default class APIService {
         formData.append("password", password)
 
         response = await this.sendData(formData, `${APIService.API_ADDRESS}/api/v1/auth/login`)
+
         if (response !== undefined) {
             if (response.status === 200) {
                 // Success Login
                 responseContent = await response.json()
-                accessToken = responseContent["access_token"]
+                accessToken = responseContent["user"]["access_token"]
                 APIService.ACCESS_TOKEN = accessToken
 
                 return {success:true, reason:""}
@@ -120,20 +121,21 @@ export default class APIService {
         if (this.running === true) {
             return {success: false, reason: "already"}
         }
-
         this.running = true
+
         response = await this.getData(`${APIService.API_ADDRESS}/api/v1/violations`)
         if (response !== undefined) {
             reportHistory = await response.json()
             violations = reportHistory["violations"]
+            
+            if (violations === undefined) {
+                return {success:false, reason:""} 
+            }
 
-            var results = await Promise.all(violations.map(async (violation) => {
-                imageLink = violation["presigned_url"]
+            await Promise.all(violations.map(async (violation) => {
                 if (await FileService.checkCacheFileExists(violation["id"] + ".png") === false) {
-                    uri = await FileService.saveReportHistoryImage(imageLink, violation["id"])
-
+                    uri = await FileService.saveReportHistoryImage(violation["presigned_url"], violation["id"])
                     violation["uri"] = uri
-                    console.log(violation["uri"])
                 } else {
                     violation["uri"] = FileService.getCacheDir() + violation["id"] + ".png"
                 }

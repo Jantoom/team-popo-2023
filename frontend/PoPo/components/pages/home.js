@@ -4,7 +4,6 @@ import React from "react";
 import { StyleService, Colors } from '../../services/StyleServices';
 import NavigationService from '../../services/navigationService';
 import DimensionService from '../../services/dimensionService';
-import MainLayout from '../mainLayout';
 import APIService from '../../services/restAPIService';
 
 export default class HomePage extends React.Component {
@@ -19,6 +18,7 @@ export default class HomePage extends React.Component {
             buttonsWidth: "46%",
             reportHistoryLoaded: false,
             reportHistory: [],
+            reportHistorySize: 0,
         }
 
         this.onOrientationChange = () => {
@@ -36,9 +36,19 @@ export default class HomePage extends React.Component {
         this.onOrientationChange()
         DimensionService.addListener(this.onOrientationChange)
         APIService.getReportHistory().then((res) => {
-
             if (res["success"] === true) {
-                this.setState({reportHistoryLoaded: true, reportHistory: res["reportHistory"]["violations"]})
+                this.setState({
+                    reportHistoryLoaded: true,
+                    reportHistory: res["reportHistory"]["violations"]
+                })
+
+            } else {
+                this.setState(
+                    {
+                        reportHistoryLoaded: true,
+                        reportHistorySize: 0
+                    }
+                )
             }
         })
     }
@@ -91,7 +101,7 @@ export default class HomePage extends React.Component {
                         this.state.reportHistoryLoaded === true  ? (
                         <>
                         {
-                            this.state.reportHistory.size > 0 ?
+                            this.state.reportHistory.length > 0 ?
                             this.state.reportHistory.map((violation) => {
                                 return (
                                     <View key={violation.id} style={{padding:10, backgroundColor: "white", marginBottom:10, borderRadius:10}}>
@@ -99,11 +109,11 @@ export default class HomePage extends React.Component {
                                             {violation.uri === "" ? (
                                                 <Image source={require("../../assets/gallery.png")} style={{width:"25%", aspectRatio:1, borderRadius:5, marginRight:5, alignSelf:"center"}}></Image>
                                             ) : (
-                                                <Image source={{uri: violation.uri}} style={{width:"25%", height:"95%", borderRadius:5, marginRight:5}}></Image>
+                                                <Image source={{uri: violation.uri}} style={{width:"25%", aspectRatio:0.7, maxHeight:100, maxWidth: 100, borderRadius:5, marginRight:5, alignSelf:'center'}}></Image>
                                             )}
                                             
                                             <View style={{flex:1}}>
-                                                <Text style={{fontFamily:"B612", fontSize:15, fontWeight:'bold'}}>{violation.created_at}</Text>                                                
+                                                <Text style={{fontFamily:"B612", fontSize:15, fontWeight:'bold'}}>{violation.date_created}</Text>                                                
                                                 <Text style={{fontFamily:"B612", fontSize:13}}>Status: {violation["status"]}</Text>
 
                                                 {violation["extra_comments"] !== "" ? (
@@ -112,10 +122,10 @@ export default class HomePage extends React.Component {
                                                 <Text></Text>
                                             </View>
                                         </View>
-                                        
                                     </View>
                                 )
-                            }) : (<Text style={{alignSelf:'center', marginVertical:10, fontSize:13}}>No Reports</Text>)
+                            })
+                            : (<Text style={{alignSelf:'center', marginVertical:10, fontSize:13}}>No Reports</Text>)
                         }</>
                     
                         ) : (<ActivityIndicator size="large" />)

@@ -92,7 +92,7 @@ export default class ReportPage extends React.Component {
                     {this.state.errorOccured === true ? (
                         <Text style={{color:"red", textAlign:"center", marginBottom:5, fontSize:15}}>Error Ocured</Text>
                     ) : <></>}
-                    <TouchableOpacity onPress={() => this.sendImage()} style={{backgroundColor:"#A3BFF4", borderRadius:20, alignSelf:'center', width:"100%", padding:10, marginBottom:30}}>
+                    <TouchableOpacity onPress={() => this.sendImage()} style={{backgroundColor:"#6494e9", borderRadius:20, alignSelf:'center', width:"100%", padding:10, marginBottom:30}}>
                         <Text style={{color:"white", alignSelf:"center"}}>Submit</Text>
                     </TouchableOpacity>
                 </ScrollView>
