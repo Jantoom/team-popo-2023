@@ -32,7 +32,7 @@ if [ $# -eq 0 ] || [ "$1" -eq "0" ]; then
 fi
 
 # Monolithic
-if [ $# -eq 0 ] && [ "$1" -eq "1" ]; then
+if [ $# -eq 0 ] || [ "$1" -eq "1" ]; then
     docker build -t monolithic -f backend/src/monolithic/Dockerfile .
     docker tag monolithic:latest $dns/monolithic:latest
     docker push $dns/monolithic:latest

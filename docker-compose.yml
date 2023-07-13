@@ -58,6 +58,12 @@ services:
       - auth
       - violations
 
+  redis: 
+   image: redis:latest 
+   restart: always 
+   ports: 
+    - 6379:6379
+
   model:
     build:
       context: .
@@ -67,3 +73,4 @@ services:
       - docker-compose.env
     depends_on:
       - database
+      - redis

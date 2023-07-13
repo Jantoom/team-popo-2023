@@ -16,6 +16,7 @@ COPY credentials /root/.aws/credentials
 # Copying our application into the container
 COPY backend/src/core src/core
 COPY backend/src/violations src/violations
+COPY backend/src/model src/model
 # Running our application
 RUN chmod +x src/core/docker-entrypoint
 ENTRYPOINT ["src/core/docker-entrypoint"]

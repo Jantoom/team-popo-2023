@@ -30,12 +30,12 @@ def upload_violation(data: dict) -> Violation:
         input_type=data['type'],
         extra_comments=data['extra_comments']
     )
+    violation.status = StatusEnum.UPLOADED.value
     db.session.add(violation)
     db.session.commit()
     db.session.refresh(violation)
 
     classify_violation(violation, data['image'])
-    db.session.refresh(violation)
 
     return violation
     
@@ -68,7 +68,7 @@ def create_presigned_url(resource_url: str) -> str:
     except ClientError as e:
         #TODO handle better
         print(e)
-        return ""
+        return ''
     return response
 
 ### --------- CLASSIFICATION --------- ###
@@ -78,6 +78,9 @@ def classify_violation(violation, image):
         violation.status = StatusEnum.CLASSIFYING.value
         task = classify_violation_task.apply_async(args=[image])
         result = AsyncResult(task)
+    else:
+        raise Exception("Violation wasn't in uploaded state.")
     db.session.commit()
     result.get()
+    db.session.refresh(violation)
     return result

@@ -3,12 +3,11 @@
 
 ### Base URL to connect to
 @localDns = 127.0.0.1:6400
-@serverDns = popo-1349446900.us-east-1.elb.amazonaws.com
+@serverDns = popo-202235509.us-east-1.elb.amazonaws.com
 @baseUrl = http://{{localDns}}/api/v1
 
 ### ------------------------------ USERS ------------------------------
-@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4ODk1NjA1MiwianRpIjoiMGIzNTQ5MDYtZGM3Yi00YThmLTljZjctMzJiZjVkYmM2ZWRlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImZhMzBhYTBlLWJlMGQtNGVjNi05MTM3LTQ4MzZjZWNlZmM3YSIsIm5iZiI6MTY4ODk1NjA1MiwiZXhwIjoxNjg5MDQyNDUyfQ.MMsYnyxDZYwXp3yxkWGfjUSwpRPM-Z7YHnEwEofMU9k
-    "id": "fa30aa0e-be0d-4ec6-9137-4836cecefc7a
+@testToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4OTIyMjM0MiwianRpIjoiY2NkODFkZmItODI1NC00NDBhLThlMTYtOWRjODgxYzA1Zjc5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjI2MDM5OThiLTQzNjktNGU5Ni1hYTgzLWQ4ZmVmMjI3ODhkZSIsIm5iZiI6MTY4OTIyMjM0MiwiZXhwIjoxNjg5MzA4NzQyfQ.ydsJqki7B4-_OFlYov3mASob0IMQzBuPPLVF3Je_v_Y
 
 ### Query the health of the user service.
 GET {{baseUrl}}/auth/health

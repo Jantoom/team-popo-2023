@@ -1,8 +1,8 @@
 import numpy as np
-import cv2
 import math
 from sympy import Point
 import shapely
+import cv2
 
 from roboflow import Roboflow
 

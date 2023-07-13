@@ -10,7 +10,7 @@ resource "aws_appautoscaling_target" "monolithic" {
 
 resource "aws_appautoscaling_target" "admin" { 
     max_capacity       = 10 
-    min_capacity       = 1 
+    min_capacity       = 0 
     resource_id        = "service/popo/admin" 
     scalable_dimension = "ecs:service:DesiredCount" 
     service_namespace  = "ecs" 
@@ -20,7 +20,7 @@ resource "aws_appautoscaling_target" "admin" {
 
 resource "aws_appautoscaling_target" "auth" { 
     max_capacity       = 10 
-    min_capacity       = 1 
+    min_capacity       = 0 
     resource_id        = "service/popo/auth" 
     scalable_dimension = "ecs:service:DesiredCount" 
     service_namespace  = "ecs" 
@@ -30,7 +30,7 @@ resource "aws_appautoscaling_target" "auth" {
 
 resource "aws_appautoscaling_target" "violations" { 
     max_capacity       = 10 
-    min_capacity       = 1 
+    min_capacity       = 0 
     resource_id        = "service/popo/violations" 
     scalable_dimension = "ecs:service:DesiredCount" 
     service_namespace  = "ecs" 
