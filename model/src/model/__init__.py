@@ -9,3 +9,6 @@ def train_model():
 
 def predict_image():
     print(start('input.jpg', showImage=True))
+
+if __name__ == '__main__':
+    predict_image()

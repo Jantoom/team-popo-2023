@@ -1,4 +1,4 @@
-import json, os, subprocess
+import os, subprocess, cv2
 from celery import Celery, Task
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -17,13 +17,15 @@ celery.conf.task_default_queue = os.getenv('CELERY_DEFAULT_QUEUE', 'popo-model')
 
 class ClassifyViolationTask(Task):
     def run(self, image, id):
-        with open('input.jpg', 'w') as image_file:
-            json.dump(image, image_file)
-        result = subprocess.run(['pipenv', 'run', 'src/__init__.py', 'input.jpg'], capture_output=True)
+        # Save image to storage
+        with open('input.jpg', 'wb') as input:
+            input.write(image)
+        # Predict
+        result = subprocess.run(['python3', 'src/model/__init__.py'], capture_output=True)
         result = result.stdout.decode('utf-8') == 'True'
-
-        with open('output.jpg', 'r') as mask_file:
-            mask_image = mask_file.read()
+        # Load masked image
+        with open('src/model/output.jpg', 'rb') as output:
+            mask_image = output.read()
 
         return {'result': result, 'mask_image': mask_image}
         

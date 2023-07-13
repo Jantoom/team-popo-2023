@@ -2,9 +2,7 @@ FROM ubuntu:latest
 # Installing dependencies for running a python application
 RUN apt-get update && apt-get install -y python3 python3-pip postgresql-client libpq-dev libcurl4-openssl-dev libssl-dev
 # Installing dependencies for model-related packages
-RUN apt-get update && apt-get install -y ffmpeg 
-RUN apt-get update && apt-get install -y libsm6 
-RUN apt-get update && apt-get install -y libxext6
+RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6
 # Install pipenv
 RUN pip3 install pipenv
 # Setting the working directory
